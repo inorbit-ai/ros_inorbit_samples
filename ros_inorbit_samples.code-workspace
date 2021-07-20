@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "Global",
+			"path": ".",
+		},
+		{
+			"name": "InOrbit Republisher",
+			"path": "inorbit_republisher",
+		},
+	],
+	"settings": {}
+}

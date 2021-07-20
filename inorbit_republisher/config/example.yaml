@@ -1,0 +1,21 @@
+republishers:
+- topic: "/rosout"
+  msg_type: "rosgraph_msgs/Log"
+  mappings:
+  - field: "msg"
+    mapping_type: "single_field"
+    out:
+      topic: "/inorbit/custom_data/0"
+      key: "rosout_msg"
+
+- topic: "/diagnostics"
+  msg_type: "diagnostic_msgs/DiagnosticArray"
+  mappings:
+  - field: "status"
+    mapping_type: "array_of_fields"
+    mapping_options:
+      fields: ["level", "hardware_id"]
+      filter: 'lambda x: (x.level == 1 or x.level == 2)'
+    out:
+      topic: "/inorbit/diagnostics_test"
+      key: "diagnostics_status"
