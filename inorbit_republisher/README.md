@@ -29,6 +29,16 @@ Create a YAML config file specifying the mappings you would like to use using th
       out:
         topic: "/inorbit/custom_data/0"
         key: "hardware_error"
+  - topic: "/hardware/battery"
+    msg_type: "BatteryState"
+    mappings:
+    - field: "state"
+      mapping_type: "json_of_fields"
+      mapping_options:
+        fields: ["voltage", "current", "power_supply_status", "power_supply_health"]
+      out:
+        topic: "/inorbit/custom_data/0"
+        key: "battery_state"
 ```
 
 Then launch the ``republisher.py`` script passing the config file as the ``config`` param.
@@ -65,6 +75,27 @@ When republishing an array of fields, you can include a set of ``mapping_options
   ```yaml
   mapping_options:
     filter: 'lambda x: (x > 5)'
+  ```
+
+### JSON of fields: mapping options
+
+When republishing several fields of a nested structure, this mapping type allows to bundle them together in a single JSON message instead of republishing all the fields of interest separately.
+
+The `mapping_options` for this type include:
+
+* `fields`: a set of fields that you'd like to capture from the nested message. For example, if your message definition looks like [batteryState](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/BatteryState.html):
+
+  setting
+
+  ```yaml
+  mapping_options:
+    fields: ["voltage", "current", "power_supply_status", "power_supply_health"]
+  ```
+
+  would output a JSON object with the fields as keys with their respective values for the message
+
+  ```
+  data: "report={\"voltage\": 11.45, \"current\": -0.123, \"power_supply_status\": 2, \"power_supply_health\": 1}"
   ```
 
 ## Building and running locally
