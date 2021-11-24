@@ -5,6 +5,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   roslib
   std_msgs
+  geometry_msgs
 )
 
 catkin_package()

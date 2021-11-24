@@ -95,7 +95,7 @@ The `mapping_options` for this type include:
   would output a JSON object with the fields as keys with their respective values for the message
 
   ```
-  data: "linear_vel={\"x\": 11.45, \"y\": -0.123, \"z\": 0}"
+  data: "linear_vel={\"y\": 0.00013548378774430603, \"x\": 0.0732172280550003, \"z\": 0.0}"
   ```
 
 ## Building and running locally
