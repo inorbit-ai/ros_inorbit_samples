@@ -29,16 +29,16 @@ Create a YAML config file specifying the mappings you would like to use using th
       out:
         topic: "/inorbit/custom_data/0"
         key: "hardware_error"
-  - topic: "/hardware/battery"
-    msg_type: "BatteryState"
+  - topic: "/cmd_vel"
+    msg_type: "geometry_msgs/Twist"
     mappings:
-    - field: "state"
+    - field: "linear"
       mapping_type: "json_of_fields"
       mapping_options:
-        fields: ["voltage", "current", "power_supply_status", "power_supply_health"]
+        fields: ["x", "y", "z"]
       out:
-        topic: "/inorbit/custom_data/0"
-        key: "battery_state"
+        topic: "/inorbit/linear_vel_test"
+        key: "linear_vel"
 ```
 
 Then launch the ``republisher.py`` script passing the config file as the ``config`` param.
@@ -83,19 +83,19 @@ When republishing several fields of a nested structure, this mapping type allows
 
 The `mapping_options` for this type include:
 
-* `fields`: a set of fields that you'd like to capture from the nested message. For example, if your message definition looks like [batteryState](http://docs.ros.org/en/melodic/api/sensor_msgs/html/msg/BatteryState.html):
+* `fields`: a set of fields that you'd like to capture from the nested message. For example, if your message definition looks like [Twist](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html):
 
   setting
 
   ```yaml
   mapping_options:
-    fields: ["voltage", "current", "power_supply_status", "power_supply_health"]
+    fields: ["x", "y", "z"]
   ```
 
   would output a JSON object with the fields as keys with their respective values for the message
 
   ```
-  data: "report={\"voltage\": 11.45, \"current\": -0.123, \"power_supply_status\": 2, \"power_supply_health\": 1}"
+  data: "linear_vel={\"x\": 11.45, \"y\": -0.123, \"z\": 0}"
   ```
 
 ## Building and running locally
@@ -106,7 +106,7 @@ Find below instructions for building the package and running the node using the 
 
 ```bash
 cd ~/catkin_ws
-rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=noetic
+rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=melodic
 catkin clean
 catkin build inorbit_republisher --verbose
 ```
@@ -121,7 +121,6 @@ roslaunch launch/example.launch
 
 ## TODO
 
-* Mapping of nested, top-level and complex (object) fields
 * Schema validation
 * Better documentation
 * Error handling

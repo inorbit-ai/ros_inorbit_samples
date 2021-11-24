@@ -20,13 +20,13 @@ republishers:
       topic: "/inorbit/diagnostics_test"
       key: "diagnostics_status"
 
-- topic: "/hardware/battery"
-  msg_type: "BatteryState"
+- topic: "/cmd_vel"
+  msg_type: "geometry_msgs/Twist"
   mappings:
-  - field: "state"
+  - field: "linear"
     mapping_type: "json_of_fields"
     mapping_options:
-      fields: ["voltage", "current", "power_supply_status", "power_supply_health"]
+      fields: ["x", "y", "z"]
     out:
-      topic: "/inorbit/custom_data/0"
-      key: "battery_state"
+      topic: "/inorbit/linear_vel_test"
+      key: "linear_vel"
