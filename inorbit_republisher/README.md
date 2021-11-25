@@ -29,6 +29,16 @@ Create a YAML config file specifying the mappings you would like to use using th
       out:
         topic: "/inorbit/custom_data/0"
         key: "hardware_error"
+  - topic: "/cmd_vel"
+    msg_type: "geometry_msgs/Twist"
+    mappings:
+    - field: "linear"
+      mapping_type: "json_of_fields"
+      mapping_options:
+        fields: ["x", "y", "z"]
+      out:
+        topic: "/inorbit/linear_vel_test"
+        key: "linear_vel"
 ```
 
 Then launch the ``republisher.py`` script passing the config file as the ``config`` param.
@@ -67,6 +77,27 @@ When republishing an array of fields, you can include a set of ``mapping_options
     filter: 'lambda x: (x > 5)'
   ```
 
+### JSON of fields: mapping options
+
+When republishing several fields of a nested structure, this mapping type allows to bundle them together in a single JSON message instead of republishing all the fields of interest separately.
+
+The `mapping_options` for this type include:
+
+* `fields`: a set of fields that you'd like to capture from the nested message. For example, if your message definition looks like [Twist](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html):
+
+  setting
+
+  ```yaml
+  mapping_options:
+    fields: ["x", "y", "z"]
+  ```
+
+  would output a JSON object with the fields as keys with their respective values for the message
+
+  ```
+  data: "linear_vel={\"y\": 0.00013548378774430603, \"x\": 0.0732172280550003, \"z\": 0.0}"
+  ```
+
 ## Building and running locally
 
 Find below instructions for building the package and running the node using the the code on the workspace (see also [catkin](https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html)).
@@ -75,7 +106,7 @@ Find below instructions for building the package and running the node using the 
 
 ```bash
 cd ~/catkin_ws
-rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=noetic
+rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=kinetic
 catkin clean
 catkin build inorbit_republisher --verbose
 ```
@@ -90,7 +121,6 @@ roslaunch launch/example.launch
 
 ## TODO
 
-* Mapping of nested, top-level and complex (object) fields
 * Schema validation
 * Better documentation
 * Error handling

@@ -19,3 +19,14 @@ republishers:
     out:
       topic: "/inorbit/diagnostics_test"
       key: "diagnostics_status"
+
+- topic: "/cmd_vel"
+  msg_type: "geometry_msgs/Twist"
+  mappings:
+  - field: "linear"
+    mapping_type: "json_of_fields"
+    mapping_options:
+      fields: ["x", "y", "z"]
+    out:
+      topic: "/inorbit/linear_vel_test"
+      key: "linear_vel"
