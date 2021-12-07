@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
+#!/usr/bin/env python
 #
 # ROS to InOrbit republisher node sample
 #
@@ -29,15 +29,16 @@
 
 import json
 import rospy
+import genpy
 import yaml
 from std_msgs.msg import String
-from rospy.msg import AnyMsg
 from roslib.message import get_message_class
 from operator import attrgetter
 
 # Types of mappings allowed
 MAPPING_TYPE_SINGLE_FIELD = "single_field"
 MAPPING_TYPE_ARRAY_OF_FIELDS = "array_of_fields"
+MAPPING_TYPE_JSON_OF_FIELDS = "json_of_fields"
 
 """
 Main node entry point.
@@ -82,20 +83,27 @@ def main():
 
         # Prepare callback to relay messages through InOrbit custom data
         def callback(msg, repub=repub):
-            
+
             for mapping in repub['mappings']:
                 key = mapping['out']['key']
                 val = ""
                 mapping_type = mapping.get('mapping_type', MAPPING_TYPE_SINGLE_FIELD)
-                topic = mapping['out']['topic']              
-                
+                topic = mapping['out']['topic']
+
                 if mapping_type == MAPPING_TYPE_SINGLE_FIELD:
                     val = extract_value(msg, attrgetter(mapping['field']))
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
                     val = process_array(field, mapping)
-              
+
+                elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
+                    try:
+                        val = extract_values_as_dict(msg, mapping)
+                        val = json.dumps(val)
+                    except TypeError as e:
+                        rospy.logwarn("Failed to serialize message: %s", e)
+
                 pubs[topic].publish("{}={}".format(key, val))
 
         in_topic = repub['topic']
@@ -122,6 +130,29 @@ def extract_value(msg, getter_fn):
     # TODO(adamantivm) Allow serialization of complex values
     val = getter_fn(msg)
     return val
+
+"""
+Extracts several values from a given nested msg field and returns a dictionary of
+<field, value> elements
+"""
+def extract_values_as_dict(msg, mapping):
+    values = {}
+    base_getter_fn = attrgetter(mapping['field'])
+    base_value = base_getter_fn(msg)
+    fields = mapping.get('mapping_options', {}).get('fields')
+    for field in fields:
+        getter_fn = attrgetter(field)
+        try:
+            val = getter_fn(base_value)
+            # genpy.Time values can't be serialized into JSON. convert them to seconds
+            # TODO(diegobatt): Catch other datatypes
+            if isinstance(val, genpy.Time):
+                val = val.to_sec()
+            # TODO(diegobatt): Make it possible to use a different key than the field
+            values[field] = val
+        except AttributeError as e:
+            rospy.logwarn('Couldn\'t get attribute %s: %s', field, e)
+    return values
 
 """
 Processes a given array field from the ROS message and:
@@ -156,6 +187,7 @@ def process_array(field, mapping):
         values['data'] = filtered_array
 
     return json.dumps(values)
+
 
 if __name__ == '__main__':
     try:
