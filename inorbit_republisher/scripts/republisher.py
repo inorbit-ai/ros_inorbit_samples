@@ -89,6 +89,7 @@ def main():
                 topic = mapping['out']['topic']
 
                 if mapping_type == MAPPING_TYPE_SINGLE_FIELD:
+                    # TODO(adamantivm) Exception handling
                     field = extract_value(msg, attrgetter(mapping['field']))
                     val = process_single_field(field, mapping)
 

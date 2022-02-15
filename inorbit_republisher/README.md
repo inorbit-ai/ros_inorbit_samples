@@ -57,6 +57,17 @@ A suggested way to organize this is by creating the config file and launch file 
 
 The republisher can map the ROS values to single field (e.g. ``'fruit=apple'``) or to an array of fields (e.g. ``'fruits=[{fruit1: apple, fruit2: orange}, {fruit1: melon, fruit2: apple}]'``). The former is useful to capture simple fields and the latter to get data from an array of values.
 
+### Single field: mapping options
+
+When republishing a single field, you can include a set of ``mapping_options`` for each ``mapping``. These include:
+
+* `filter`: a lambda expression that can be used to whether to publish the value or not based on a condition. For example, if you'd like to republish only String values that are different than ``SPAMMY STRING`` only, you can do it with:
+
+  ```yaml
+  mapping_options:
+    filter: 'lambda x: (x != "SPAMMY STRING")'
+  ```
+
 ### Array of fields: mapping options
 
 When republishing an array of fields, you can include a set of ``mapping_options`` for each ``mapping``. These include:
