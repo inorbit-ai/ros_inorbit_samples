@@ -84,12 +84,13 @@ def main():
 
             for mapping in repub['mappings']:
                 key = mapping['out']['key']
-                val = ""
+                val = None
                 mapping_type = mapping.get('mapping_type', MAPPING_TYPE_SINGLE_FIELD)
                 topic = mapping['out']['topic']
 
                 if mapping_type == MAPPING_TYPE_SINGLE_FIELD:
-                    val = extract_value(msg, attrgetter(mapping['field']))
+                    field = extract_value(msg, attrgetter(mapping['field']))
+                    val = process_single_field(field, mapping)
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
@@ -102,7 +103,8 @@ def main():
                     except TypeError as e:
                         rospy.logwarn("Failed to serialize message: %s", e)
 
-                pubs[topic].publish("{}={}".format(key, val))
+                if val is not None:
+                    pubs[topic].publish("{}={}".format(key, val))
 
         in_topic = repub['topic']
 
@@ -151,6 +153,16 @@ def extract_values_as_dict(msg, mapping):
         except AttributeError as e:
             rospy.logwarn('Couldn\'t get attribute %s: %s', field, e)
     return values
+
+"""
+Processes a scalar value before publishing according to mapping options
+ - If a 'filter' function is provided, it returns the value only if the
+   result of passing the field value through the filter function is True,
+   otherwise it returns None
+"""
+def process_single_field(field_value, mapping):
+    filter_fn = mapping.get('mapping_options', {}).get('filter')
+    return field_value if not filter_fn or eval(filter_fn)(field_value) else None
 
 """
 Processes a given array field from the ROS message and:
