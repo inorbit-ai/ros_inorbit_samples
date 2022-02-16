@@ -74,7 +74,8 @@ def main():
     rospack = rospkg.RosPack()
 
     # Set-up ROS topic republishers
-    for repub in config['republishers']:
+    republishers = config.get('republishers', ())
+    for repub in republishers:
 
         # Load subscriber message type
         msg_class = get_message_class(repub['msg_type'])
@@ -120,7 +121,8 @@ def main():
         subs[in_topic] = rospy.Subscriber(in_topic, msg_class, callback)
 
     # Set-up static publishers
-    for static_pub_config in config['static_publishers']:
+    static_publishers = config.get('static_publishers', ())
+    for static_pub_config in static_publishers:
         key = static_pub_config['out']['key']
         topic = static_pub_config['out']['topic']
 
