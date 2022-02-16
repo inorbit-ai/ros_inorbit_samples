@@ -29,6 +29,8 @@ import json
 import rospy
 import genpy
 import yaml
+import rospkg
+import os
 from std_msgs.msg import String
 from roslib.message import get_message_class
 from operator import attrgetter
@@ -37,6 +39,10 @@ from operator import attrgetter
 MAPPING_TYPE_SINGLE_FIELD = "single_field"
 MAPPING_TYPE_ARRAY_OF_FIELDS = "array_of_fields"
 MAPPING_TYPE_JSON_OF_FIELDS = "json_of_fields"
+
+# Supported static publisher value sources
+STATIC_VALUE_FROM_PACKAGE_VERSION = "package_version"
+STATIC_VALUE_FROM_ENVIRONMENT_VAR = "environment_variable"
 
 """
 Main node entry point.
@@ -64,6 +70,10 @@ def main():
     # Dictionary of subscriber instances by topic name
     subs = {}
 
+    # In case we want to query ROS package options
+    rospack = rospkg.RosPack()
+
+    # Set-up ROS topic republishers
     for repub in config['republishers']:
 
         # Load subscriber message type
@@ -109,6 +119,33 @@ def main():
         # subscribe
         subs[in_topic] = rospy.Subscriber(in_topic, msg_class, callback)
 
+    # Set-up static publishers
+    for static_pub_config in config['static_publishers']:
+        key = static_config['out']['key']
+        topic = static_config['out']['topic']
+
+        # If a literal value is provided, it takes highest precendence
+        val = static_config.get('value')
+
+        # Otherwise, fetch the value from the specified source
+        if val is None:
+            value_from = static_config.get('value_from')
+            if STATIC_VALUE_FROM_PACKAGE_VERSION in value_from:
+                pkg_name = value_from[STATIC_VALUE_FROM_PACKAGE_VERSION]
+                pkg_manifest = rospack.get_manifest(pkg_name)
+                val = pkg_manifest.version
+            else if STATIC_VALUE_FROM_ENVIRONMENT_VAR in value_from:
+                var_name = value_from[STATIC_VALUE_FROM_ENVIRONMENT_VAR]
+                val = os.environ[var_name]
+
+        # If there is a value to publish, publish it as latched.
+        # NOTE(adamantivm) We use a new publisher for each key so that the inorbit agent
+        # can receive all of the latched values even if they are all published to the same
+        # topic. This only scales to a handful of values. If support for a large list of
+        # values is necessary, a different approach needs to be implemented.
+        if val is not None:
+            rospy.Publisher(topic, String, latched=True).publish("{}={}".format(key, val))
+
     rospy.loginfo('Republisher started')
     rospy.spin()
     rospy.loginfo('Republisher shutting down')
@@ -151,6 +188,16 @@ def extract_values_as_dict(msg, mapping):
         except AttributeError as e:
             rospy.logwarn('Couldn\'t get attribute %s: %s', field, e)
     return values
+
+"""
+Processes a scalar value before publishing according to mapping options
+ - If a 'filter' function is provided, it returns the value only if the
+   result of passing the field value through the filter function is True,
+   otherwise it returns None
+"""
+def process_single_field(field_value, mapping):
+    filter_fn = mapping.get('mapping_options', {}).get('filter')
+    return field_value if not filter_fn or eval(filter_fn)(field_value) else None
 
 """
 Processes a given array field from the ROS message and:
