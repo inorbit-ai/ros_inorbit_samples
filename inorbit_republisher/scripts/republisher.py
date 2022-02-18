@@ -144,6 +144,7 @@ def main():
             value_from = static_pub_config.get('value_from')
             if STATIC_VALUE_FROM_PACKAGE_VERSION in value_from:
                 pkg_name = value_from[STATIC_VALUE_FROM_PACKAGE_VERSION]
+                # TODO(adamantivm) Exception handling
                 pkg_manifest = rospack.get_manifest(pkg_name)
                 val = pkg_manifest.version
             elif STATIC_VALUE_FROM_ENVIRONMENT_VAR in value_from:
