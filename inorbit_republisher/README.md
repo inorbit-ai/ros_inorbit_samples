@@ -61,7 +61,7 @@ The republisher can map the ROS values to single field (e.g. ``'fruit=apple'``) 
 
 When republishing a single field, you can include a set of ``mapping_options`` for each ``mapping``. These include:
 
-* `filter`: a lambda expression that can be used to whether to publish the value or not based on a condition. For example, if you'd like to republish only String values that are different than ``SPAMMY STRING`` only, you can do it with:
+* `filter`: a lambda expression that can be used to control whether or not the value is published based on a condition. For example, if you'd like to republish only String values that are different than ``SPAMMY STRING``, you can do it with:
 
   ```yaml
   mapping_options:
