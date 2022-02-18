@@ -55,9 +55,16 @@ def main():
     # Start the ROS node
     rospy.init_node('inorbit_republisher', anonymous=True)
 
-    # Read republisher configuration from the 'config' parameter
+    # Read republisher configuration from the 'config_file' or 'config' parameter
     # TODO(adamantivm) Error handling and schema checking
-    config = yaml.safe_load(rospy.get_param('~config'))
+    if rospy.has_param('~config_file'):
+        config_file = rospy.get_param('~config_file')
+        rospy.loginfo("Using config from config file: {}".format(config_file))
+        config_yaml = open(config_file, "r")
+    elif rospy.has_param('~config'):
+        config_yaml = rospy.get_param('~config')
+        rospy.loginfo("Using config from parameter server")
+    config = yaml.safe_load(config_yaml)
 
     # Go through republisher configurations
     # For each of them: create a publisher if necessary - only one per InOrbit
@@ -95,12 +102,14 @@ def main():
 
             for mapping in repub['mappings']:
                 key = mapping['out']['key']
-                val = ""
+                val = None
                 mapping_type = mapping.get('mapping_type', MAPPING_TYPE_SINGLE_FIELD)
                 topic = mapping['out']['topic']
 
                 if mapping_type == MAPPING_TYPE_SINGLE_FIELD:
-                    val = extract_value(msg, attrgetter(mapping['field']))
+                    # TODO(adamantivm) Exception handling
+                    field = extract_value(msg, attrgetter(mapping['field']))
+                    val = process_single_field(field, mapping)
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
@@ -113,7 +122,8 @@ def main():
                     except TypeError as e:
                         rospy.logwarn("Failed to serialize message: %s", e)
 
-                pubs[topic].publish("{}={}".format(key, val))
+                if val is not None:
+                    pubs[topic].publish("{}={}".format(key, val))
 
         in_topic = repub['topic']
 

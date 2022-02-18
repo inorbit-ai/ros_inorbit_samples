@@ -4,6 +4,8 @@ republishers:
   mappings:
   - field: "msg"
     mapping_type: "single_field"
+    mapping_options:
+      filter: 'lambda x: x != "Go"'
     out:
       topic: "/inorbit/custom_data/0"
       key: "rosout_msg"
