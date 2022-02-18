@@ -49,7 +49,7 @@ def main():
     # Start the ROS node
     rospy.init_node('inorbit_republisher', anonymous=True)
 
-    # Read republisher configuration from the 'config' or 'config_file' parameter
+    # Read republisher configuration from the 'config_file' or 'config' parameter
     # TODO(adamantivm) Error handling and schema checking
     if rospy.has_param('~config_file'):
         config_file = rospy.get_param('~config_file')
