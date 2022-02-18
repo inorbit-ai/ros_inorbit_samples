@@ -234,8 +234,8 @@ def process_array(field, mapping):
 
 
 """
-Wrapper class to allow publishing more than one latched message over the same topic, working around a
-rospy limitation caused by the use of Publisher singletons.
+Wrapper class to allow publishing more than one latched message over the same topic, working
+around a rospy limitation caused by the use of Publisher singletons.
 For more details see: https://github.com/ros/ros_comm/issues/146#issuecomment-307507271
 """
 class LatchPublisher(rospy.Publisher, rospy.SubscribeListener):
