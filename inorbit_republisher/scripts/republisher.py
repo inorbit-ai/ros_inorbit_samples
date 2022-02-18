@@ -49,9 +49,16 @@ def main():
     # Start the ROS node
     rospy.init_node('inorbit_republisher', anonymous=True)
 
-    # Read republisher configuration from the 'config' parameter
+    # Read republisher configuration from the 'config_file' or 'config' parameter
     # TODO(adamantivm) Error handling and schema checking
-    config = yaml.safe_load(rospy.get_param('~config'))
+    if rospy.has_param('~config_file'):
+        config_file = rospy.get_param('~config_file')
+        rospy.loginfo("Using config from config file: {}".format(config_file))
+        config_yaml = open(config_file, "r")
+    elif rospy.has_param('~config'):
+        config_yaml = rospy.get_param('~config')
+        rospy.loginfo("Using config from parameter server")
+    config = yaml.safe_load(config_yaml)
 
     # Go through republisher configurations
     # For each of them: create a publisher if necessary - only one per InOrbit
