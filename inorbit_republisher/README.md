@@ -110,7 +110,7 @@ The `mapping_options` for this type include:
 
 ## Publishing fixed values
 
-Sometimes it is also useful to publish fixed environment values to facilitate fleet-wide observability. It is possible to publish environment variables, package versions or fixed values using the `static_publishers` array.
+Sometimes it is also useful to publish fixed values to facilitate fleet-wide observability. It is possible to publish environment variables, package versions or fixed values using the `static_publishers` array.
 
 See the included example configuration in `config/example.yaml` for specific examples.
 
