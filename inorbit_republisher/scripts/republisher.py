@@ -138,7 +138,7 @@ def main():
                 val = pkg_manifest.version
             elif STATIC_VALUE_FROM_ENVIRONMENT_VAR in value_from:
                 var_name = value_from[STATIC_VALUE_FROM_ENVIRONMENT_VAR]
-                val = os.environ[var_name]
+                val = os.environ.get(var_name)
 
         # If there is a value to publish, publish it using once per subscriber
         if val is not None:
