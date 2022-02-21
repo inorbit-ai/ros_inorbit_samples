@@ -4,6 +4,8 @@ republishers:
   mappings:
   - field: "msg"
     mapping_type: "single_field"
+    mapping_options:
+      filter: 'lambda x: x != "Go"'
     out:
       topic: "/inorbit/custom_data/0"
       key: "rosout_msg"
@@ -30,3 +32,24 @@ republishers:
     out:
       topic: "/inorbit/linear_vel_test"
       key: "linear_vel"
+
+static_publishers:
+- value_from:
+    package_version: "rospy"
+  out:
+    topic: "/inorbit/custom_data/0"
+    key: "rospy_version"
+- value_from:
+    package_version: "inorbit_republisher"
+  out:
+    topic: "/inorbit/custom_data/0"
+    key: "inorbit_republisher_version"
+- value_from:
+    environment_variable: "PYTHONPATH"
+  out:
+    topic: "/inorbit/custom_data/0"
+    key: "python_path"
+- value: "let's republish in orbit"
+  out:
+    topic: "/inorbit/custom_data/0"
+    key: "greeting"

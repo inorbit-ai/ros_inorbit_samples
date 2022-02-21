@@ -39,6 +39,16 @@ Create a YAML config file specifying the mappings you would like to use using th
       out:
         topic: "/inorbit/linear_vel_test"
         key: "linear_vel"
+  static_publishers:
+  - value: "this is a fixed string"
+    out:
+      topic: "/inorbit/custom_data/0"
+      key: "greeting"
+  - value_from:
+      environment_variable: "PATH"
+    out:
+      topic: "/inorbit/custom_data/0"
+      key: "env_path"
 ```
 
 Then launch the ``republisher.py`` script passing the config file as the ``config`` param.
@@ -53,9 +63,20 @@ A suggested way to organize this is by creating the config file and launch file 
 </launch>
 ```
 
-## Mapping types
+## Mapping ROS topics
 
 The republisher can map the ROS values to single field (e.g. ``'fruit=apple'``) or to an array of fields (e.g. ``'fruits=[{fruit1: apple, fruit2: orange}, {fruit1: melon, fruit2: apple}]'``). The former is useful to capture simple fields and the latter to get data from an array of values.
+
+### Single field: mapping options
+
+When republishing a single field, you can include a set of ``mapping_options`` for each ``mapping``. These include:
+
+* `filter`: a lambda expression that can be used to control whether or not the value is published based on a condition. For example, if you'd like to republish only String values that are different than ``SPAMMY STRING``, you can do it with:
+
+  ```yaml
+  mapping_options:
+    filter: 'lambda x: (x != "SPAMMY STRING")'
+  ```
 
 ### Array of fields: mapping options
 
@@ -98,6 +119,14 @@ The `mapping_options` for this type include:
   data: "linear_vel={\"y\": 0.00013548378774430603, \"x\": 0.0732172280550003, \"z\": 0.0}"
   ```
 
+## Publishing fixed values
+
+Sometimes it is also useful to publish fixed values to facilitate fleet-wide observability. It is possible to publish environment variables, package versions or fixed values using the `static_publishers` array.
+
+See the included example configuration in `config/example.yaml` for specific examples.
+
+These values will be published as latched and delivered only once every time a subscriber connects to the republisher.
+
 ## Building and running locally
 
 Find below instructions for building the package and running the node using the the code on the workspace (see also [catkin](https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html)).
@@ -106,7 +135,7 @@ Find below instructions for building the package and running the node using the 
 
 ```bash
 cd ~/catkin_ws
-rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=noetic
+rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=kinetic
 catkin clean
 catkin build inorbit_republisher --verbose
 ```
