@@ -135,7 +135,7 @@ Find below instructions for building the package and running the node using the 
 
 ```bash
 cd ~/catkin_ws
-rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=kinetic
+rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=noetic
 catkin clean
 catkin build inorbit_republisher --verbose
 ```
