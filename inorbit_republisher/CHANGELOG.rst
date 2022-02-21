@@ -4,9 +4,9 @@ Changelog for package inorbit_republisher
 
 0.2.3 (2022-02-21)
 -----------
-* Allow filtering single_value mappings
-* Allow publishing package versions, environment variables or fixed strings
-* Allow using config_file parameter instead of config
+* Allow filtering single_value mappings (`#5 <https://github.com/inorbit-ai/ros_inorbit_samples/pull/5>`_)
+* Allow publishing package versions, environment variables or fixed strings (`#5 <https://github.com/inorbit-ai/ros_inorbit_samples/pull/5>`_)
+* Allow using config_file parameter instead of config (`#5 <https://github.com/inorbit-ai/ros_inorbit_samples/pull/5>`_)
 * Contributors: adamantivm
 
 0.2.2 (2021-12-07)
