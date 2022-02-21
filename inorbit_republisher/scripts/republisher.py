@@ -29,6 +29,8 @@ import json
 import rospy
 import genpy
 import yaml
+import rospkg
+import os
 from std_msgs.msg import String
 from roslib.message import get_message_class
 from operator import attrgetter
@@ -37,6 +39,10 @@ from operator import attrgetter
 MAPPING_TYPE_SINGLE_FIELD = "single_field"
 MAPPING_TYPE_ARRAY_OF_FIELDS = "array_of_fields"
 MAPPING_TYPE_JSON_OF_FIELDS = "json_of_fields"
+
+# Supported static publisher value sources
+STATIC_VALUE_FROM_PACKAGE_VERSION = "package_version"
+STATIC_VALUE_FROM_ENVIRONMENT_VAR = "environment_variable"
 
 """
 Main node entry point.
@@ -49,9 +55,16 @@ def main():
     # Start the ROS node
     rospy.init_node('inorbit_republisher', anonymous=True)
 
-    # Read republisher configuration from the 'config' parameter
+    # Read republisher configuration from the 'config_file' or 'config' parameter
     # TODO(adamantivm) Error handling and schema checking
-    config = yaml.safe_load(rospy.get_param('~config'))
+    if rospy.has_param('~config_file'):
+        config_file = rospy.get_param('~config_file')
+        rospy.loginfo("Using config from config file: {}".format(config_file))
+        config_yaml = open(config_file, "r")
+    elif rospy.has_param('~config'):
+        config_yaml = rospy.get_param('~config')
+        rospy.loginfo("Using config from parameter server")
+    config = yaml.safe_load(config_yaml)
 
     # Go through republisher configurations
     # For each of them: create a publisher if necessary - only one per InOrbit
@@ -64,7 +77,12 @@ def main():
     # Dictionary of subscriber instances by topic name
     subs = {}
 
-    for repub in config['republishers']:
+    # In case we want to query ROS package options
+    rospack = rospkg.RosPack()
+
+    # Set-up ROS topic republishers
+    republishers = config.get('republishers', ())
+    for repub in republishers:
 
         # Load subscriber message type
         msg_class = get_message_class(repub['msg_type'])
@@ -76,7 +94,7 @@ def main():
         for mapping in repub['mappings']:
             out_topic = mapping['out']['topic']
             if not out_topic in pubs:
-                pubs[out_topic] = rospy.Publisher(out_topic, String, queue_size=20)
+                pubs[out_topic] = rospy.Publisher(out_topic, String, queue_size=100)
             mapping['attrgetter'] = attrgetter(mapping['field'])
 
         # Prepare callback to relay messages through InOrbit custom data
@@ -84,12 +102,14 @@ def main():
 
             for mapping in repub['mappings']:
                 key = mapping['out']['key']
-                val = ""
+                val = None
                 mapping_type = mapping.get('mapping_type', MAPPING_TYPE_SINGLE_FIELD)
                 topic = mapping['out']['topic']
 
                 if mapping_type == MAPPING_TYPE_SINGLE_FIELD:
-                    val = extract_value(msg, attrgetter(mapping['field']))
+                    # TODO(adamantivm) Exception handling
+                    field = extract_value(msg, attrgetter(mapping['field']))
+                    val = process_single_field(field, mapping)
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
@@ -102,12 +122,39 @@ def main():
                     except TypeError as e:
                         rospy.logwarn("Failed to serialize message: %s", e)
 
-                pubs[topic].publish("{}={}".format(key, val))
+                if val is not None:
+                    pubs[topic].publish("{}={}".format(key, val))
 
         in_topic = repub['topic']
 
         # subscribe
         subs[in_topic] = rospy.Subscriber(in_topic, msg_class, callback)
+
+    # Set-up static publishers
+    static_publishers = config.get('static_publishers', ())
+    for static_pub_config in static_publishers:
+        key = static_pub_config['out']['key']
+        topic = static_pub_config['out']['topic']
+
+        # If a literal value is provided, it takes highest precendence
+        val = static_pub_config.get('value')
+
+        # Otherwise, fetch the value from the specified source
+        if val is None:
+            value_from = static_pub_config.get('value_from')
+            if STATIC_VALUE_FROM_PACKAGE_VERSION in value_from:
+                pkg_name = value_from[STATIC_VALUE_FROM_PACKAGE_VERSION]
+                # TODO(adamantivm) Exception handling
+                pkg_manifest = rospack.get_manifest(pkg_name)
+                val = pkg_manifest.version
+            elif STATIC_VALUE_FROM_ENVIRONMENT_VAR in value_from:
+                var_name = value_from[STATIC_VALUE_FROM_ENVIRONMENT_VAR]
+                val = os.environ.get(var_name)
+
+        # If there is a value to publish, publish it using once per subscriber
+        if val is not None:
+            pub = LatchPublisher(topic, String, queue_size=100)
+            pub.publish(String("{}={}".format(key, val)))
 
     rospy.loginfo('Republisher started')
     rospy.spin()
@@ -153,6 +200,16 @@ def extract_values_as_dict(msg, mapping):
     return values
 
 """
+Processes a scalar value before publishing according to mapping options
+ - If a 'filter' function is provided, it returns the value only if the
+   result of passing the field value through the filter function is True,
+   otherwise it returns None
+"""
+def process_single_field(field_value, mapping):
+    filter_fn = mapping.get('mapping_options', {}).get('filter')
+    return field_value if not filter_fn or eval(filter_fn)(field_value) else None
+
+"""
 Processes a given array field from the ROS message and:
     - Filters it using the 'filter' function (if provided)
     - For each element, it gets the set of keys defined by array_fields
@@ -186,6 +243,24 @@ def process_array(field, mapping):
 
     return json.dumps(values)
 
+
+"""
+Wrapper class to allow publishing more than one latched message over the same topic, working
+around a rospy limitation caused by the use of Publisher singletons.
+For more details see: https://github.com/ros/ros_comm/issues/146#issuecomment-307507271
+"""
+class LatchPublisher(rospy.Publisher, rospy.SubscribeListener):
+    def __init__(self, name, data_class, tcp_nodelay=False, headers=None, queue_size=None):
+        super(LatchPublisher, self).__init__(name, data_class=data_class, tcp_nodelay=tcp_nodelay, headers=headers, queue_size=queue_size, subscriber_listener=self, latch=False)
+        self.message = None
+
+    def publish(self, msg):
+        self.message = msg
+        super(LatchPublisher, self).publish(msg)
+
+    def peer_subscribe(self, resolved_name, publish, publish_single):
+        if self.message is not None:
+            publish_single(self.message)
 
 if __name__ == '__main__':
     try:
