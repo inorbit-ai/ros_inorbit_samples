@@ -119,11 +119,11 @@ The `mapping_options` for this type include:
   data: "linear_vel={\"y\": 0.00013548378774430603, \"x\": 0.0732172280550003, \"z\": 0.0}"
   ```
 
-  * `filter`: a lambda expression that can be used to control whether or not the JSON object is published based on a condition. For example, if you'd like to republish only JSON objects that have a value for the key ``important_key`` different than ``NOT IMPORTANT``, you can do it with:
+  * `filter`: a lambda expression that can be used to control whether or not the JSON object is published based on a condition. For example, if you'd like to republish only JSON objects that have a value for the key ``z`` different than ``0``, you can do it with:
 
   ```yaml
   mapping_options:
-    filter: 'lambda x: (x["important_key"] != "NOT IMPORTANT")'
+    filter: 'lambda linear_vel: (linear_vel["z"] != 0)'
   ```
 
 ## Publishing fixed values

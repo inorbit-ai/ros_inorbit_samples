@@ -118,7 +118,8 @@ def main():
                 elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
                     try:
                         val = extract_values_as_dict(msg, mapping)
-                        # We prevent sending a data:"key=null" to the topic
+                        # extract_values_as_dict has the ability to filter messages and
+                        # returns None when an element doesn't pass the filter
                         if val:
                           val = json.dumps(val)
                     except TypeError as e:
