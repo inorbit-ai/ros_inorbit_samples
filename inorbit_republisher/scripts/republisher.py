@@ -118,7 +118,9 @@ def main():
                 elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
                     try:
                         val = extract_values_as_dict(msg, mapping)
-                        val = json.dumps(val)
+                        # We prevent sending a data:"key=null" to the topic
+                        if val:
+                          val = json.dumps(val)
                     except TypeError as e:
                         rospy.logwarn("Failed to serialize message: %s", e)
 
@@ -197,7 +199,8 @@ def extract_values_as_dict(msg, mapping):
             values[field] = val
         except AttributeError as e:
             rospy.logwarn('Couldn\'t get attribute %s: %s', field, e)
-    return values
+    filter_fn = mapping.get('mapping_options', {}).get('filter')
+    return values if not filter_fn or eval(filter_fn)(values) else None
 
 """
 Processes a scalar value before publishing according to mapping options
