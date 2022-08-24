@@ -29,6 +29,7 @@ republishers:
     mapping_type: "json_of_fields"
     mapping_options:
       fields: ["x", "y", "z"]
+      filter: 'lambda vel: (vel["x"] > 0)'
     out:
       topic: "/inorbit/linear_vel_test"
       key: "linear_vel"
