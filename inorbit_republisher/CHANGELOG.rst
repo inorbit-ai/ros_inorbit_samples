@@ -2,6 +2,11 @@
 Changelog for package inorbit_republisher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.2.5 (2022-09-26)
+-----------
+* Add filtering in JSON mappings (`#15 <https://github.com/inorbit-ai/ros_inorbit_samples/issues/15>`_)
+* Contributors: elvio.aruta98
+
 0.2.4 (2022-02-21)
 -----------
 * Add conditionals in package.xml dependencies (`#10 <https://github.com/inorbit-ai/ros_inorbit_samples/issues/10>`_, `#12 <https://github.com/inorbit-ai/ros_inorbit_samples/issues/12>`_)
