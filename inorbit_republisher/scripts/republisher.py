@@ -34,6 +34,7 @@ import os
 from std_msgs.msg import String
 from roslib.message import get_message_class
 from operator import attrgetter
+import logging
 
 # Types of mappings allowed
 MAPPING_TYPE_SINGLE_FIELD = "single_field"
@@ -90,11 +91,15 @@ def main():
             rospy.logwarn('Failed to load msg class for {}'.format(repub['msg_type']))
             continue
 
+        # explicit handling of latched topics to overcome timing issues in early subscription phase
+        latched = repub.get("latched", False)
+        publisher_class = LatchPublisher if latched else rospy.Publisher
+
         # Create publisher for each new seen outgoing topic
         for mapping in repub['mappings']:
             out_topic = mapping['out']['topic']
             if not out_topic in pubs:
-                pubs[out_topic] = rospy.Publisher(out_topic, String, queue_size=100)
+                pubs[out_topic] = publisher_class(out_topic, String, queue_size=100)
             mapping['attrgetter'] = attrgetter(mapping['field'])
 
         # Prepare callback to relay messages through InOrbit custom data
@@ -264,7 +269,7 @@ class LatchPublisher(rospy.Publisher, rospy.SubscribeListener):
 
     def peer_subscribe(self, resolved_name, publish, publish_single):
         if self.message is not None:
-            publish_single(self.message)
+            super(LatchPublisher, self).publish(self.message)
 
 if __name__ == '__main__':
     try:
