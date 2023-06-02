@@ -34,6 +34,16 @@ republishers:
       topic: "/inorbit/linear_vel_test"
       key: "linear_vel"
 
+- topic: "/map_metadata"
+  latched: true
+  msg_type: "nav_msgs/MapMetaData"
+  mappings:
+  - field: "resolution"
+    mapping_type: "single_field"
+    out:
+      topic: "/inorbit/map_res_test"
+      key: "map_resolution"
+
 static_publishers:
 - value_from:
     package_version: "rospy"
