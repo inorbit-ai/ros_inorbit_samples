@@ -34,7 +34,6 @@ import os
 from std_msgs.msg import String
 from roslib.message import get_message_class
 from operator import attrgetter
-import logging
 
 # Types of mappings allowed
 MAPPING_TYPE_SINGLE_FIELD = "single_field"
