@@ -39,17 +39,15 @@ Create a YAML config file specifying the mappings you would like to use using th
       out:
         topic: "/inorbit/linear_vel_test"
         key: "linear_vel"
-  - topic: "/initialpose"
+  - topic: "/map_metadata"
     latched: true
-    msg_type: "geometry_msgs/PoseWithCovarianceStamped"
+    msg_type: "nav_msgs/MapMetaData"
     mappings:
-    - field: "pose.pose.position"
+    - field: "resolution"
       mapping_type: "single_field"
-      mapping_options:
-        fields: ["x", "y", "z"]
       out:
-        topic: "/inorbit/initial_pose_test"
-        key: "initial_pose"
+        topic: "/inorbit/map_res_test"
+        key: "map_resolution"
   static_publishers:
   - value: "this is a fixed string"
     out:
