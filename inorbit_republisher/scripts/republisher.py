@@ -71,7 +71,9 @@ def main():
     # custom data field - and a matching subscriber to receive and republish
     # the desired fields.
 
-    # Dictionary of publisher instances by topic name
+    # Dictionary of publisher instances
+    # These are keyed by *out* topic, in the case of regular input mappings
+    # or by *out*+*input* topic name in the specific case of input topics marked as latched
     pubs = {}
 
     # Dictionary of subscriber instances by topic name
@@ -90,15 +92,23 @@ def main():
             rospy.logwarn('Failed to load msg class for {}'.format(repub['msg_type']))
             continue
 
+        # explicit handling of latched topics to overcome timing issues in early subscription phase
+        latched = repub.get("latched", False)
+        publisher_class = LatchPublisher if latched else rospy.Publisher
+
+        in_topic = repub['topic']
+
         # Create publisher for each new seen outgoing topic
         for mapping in repub['mappings']:
             out_topic = mapping['out']['topic']
-            if not out_topic in pubs:
-                pubs[out_topic] = rospy.Publisher(out_topic, String, queue_size=100)
+            # If the input topic is latched, we need a separate instance per input topic
+            pub_key = "{}+{}".format(out_topic, in_topic) if latched else out_topic
+            if not pub_key in pubs:
+                pubs[pub_key] = publisher_class(out_topic, String, queue_size=100)
             mapping['attrgetter'] = attrgetter(mapping['field'])
 
         # Prepare callback to relay messages through InOrbit custom data
-        def callback(msg, repub=repub):
+        def callback(msg, repub=repub, in_topic=in_topic, latched=latched):
 
             for mapping in repub['mappings']:
                 key = mapping['out']['key']
@@ -126,9 +136,9 @@ def main():
                         rospy.logwarn("Failed to serialize message: %s", e)
 
                 if val is not None:
-                    pubs[topic].publish("{}={}".format(key, val))
+                    pub_key = "{}+{}".format(topic, in_topic) if latched else topic
+                    pubs[pub_key].publish("{}={}".format(key, val))
 
-        in_topic = repub['topic']
 
         # subscribe
         subs[in_topic] = rospy.Subscriber(in_topic, msg_class, callback)
@@ -264,7 +274,7 @@ class LatchPublisher(rospy.Publisher, rospy.SubscribeListener):
 
     def peer_subscribe(self, resolved_name, publish, publish_single):
         if self.message is not None:
-            publish_single(self.message)
+            super(LatchPublisher, self).publish(self.message)
 
 if __name__ == '__main__':
     try:

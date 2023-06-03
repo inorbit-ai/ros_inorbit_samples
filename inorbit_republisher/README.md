@@ -39,6 +39,15 @@ Create a YAML config file specifying the mappings you would like to use using th
       out:
         topic: "/inorbit/linear_vel_test"
         key: "linear_vel"
+  - topic: "/map_metadata"
+    latched: true
+    msg_type: "nav_msgs/MapMetaData"
+    mappings:
+    - field: "resolution"
+      mapping_type: "single_field"
+      out:
+        topic: "/inorbit/map_res_test"
+        key: "map_resolution"
   static_publishers:
   - value: "this is a fixed string"
     out:
@@ -133,6 +142,16 @@ Sometimes it is also useful to publish fixed values to facilitate fleet-wide obs
 See the included example configuration in `config/example.yaml` for specific examples.
 
 These values will be published as latched and delivered only once every time a subscriber connects to the republisher.
+
+## Publishing latched values
+
+Republishing latched topics requires a special treatment to make sure that all latched messages, from each mapping defined, get published when a new subscriber connects to the output topic (this case is prone to subscription issues depending on nodes startup timing). To achieve this, add a flag to the input topic config indicating that it is latched:
+
+```yaml
+republishers:
+  - topic: "/map_metadata"
+    latched: true
+```
 
 ## Building and running locally
 
