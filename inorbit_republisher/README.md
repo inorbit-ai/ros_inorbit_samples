@@ -145,7 +145,7 @@ These values will be published as latched and delivered only once every time a s
 
 ## Publishing latched values
 
-Republishing latched topics requires a special treatment to make sure that the agent receives data properly (this case is prone to subscription issues depending on nodes startup timing). To achieve this, add a flag to the input topic config indicating that it is latched:
+Republishing latched topics requires a special treatment to make sure that all latched messages, from each mapping defined, get published when a new subscriber connects to the output topic (this case is prone to subscription issues depending on nodes startup timing). To achieve this, add a flag to the input topic config indicating that it is latched:
 
 ```yaml
 republishers:
