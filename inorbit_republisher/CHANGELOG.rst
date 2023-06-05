@@ -2,6 +2,11 @@
 Changelog for package inorbit_republisher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.3.0 (2023-06-03)
+-----------
+* Add an explicit latched property for republishers (`#17 <https://github.com/inorbit-ai/ros_inorbit_samples/pull/17>`_)
+* Contributors: mechatheo
+-----------
 0.2.5 (2022-08-24)
 -----------
 * Add filtering in JSON mappings (`#14 <https://github.com/inorbit-ai/ros_inorbit_samples/pull/14>`_)
