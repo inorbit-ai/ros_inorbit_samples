@@ -28,7 +28,7 @@
 #import json
 import rclpy
 #import genpy
-#import yaml
+import yaml
 #import rospkg
 #import os
 #from std_msgs.msg import String
@@ -54,19 +54,17 @@ as complexity increases.
 def main(args = None):
     # Start the ROS node
     rclpy.init(args=args)
-    rclpy.create_node('inorbit_republisher')
-    
-
+    node = rclpy.create_node('inorbit_republisher')
+    # Declares the "config" parameter, it contains the path of the config file
+    node.declare_parameter('config')
     # Read republisher configuration from the 'config_file' or 'config' parameter
     # TODO(adamantivm) Error handling and schema checking
-    # if rospy.has_param('~config_file'):
-    #     config_file = rospy.get_param('~config_file')
-    #     rospy.loginfo("Using config from config file: {}".format(config_file))
-    #     config_yaml = open(config_file, "r")
-    # elif rospy.has_param('~config'):
-    #     config_yaml = rospy.get_param('~config')
-    #     rospy.loginfo("Using config from parameter server")
-    # config = yaml.safe_load(config_yaml)
+    if node.has_parameter('config'):
+        config_file = node.get_parameter(
+            'config').get_parameter_value().string_value
+        node.get_logger().info("Using config from config file: {}".format(config_file))
+        config_yaml = open(config_file, "r")
+    #config = yaml.safe_load(config_yaml)
 
     # # Go through republisher configurations
     # # For each of them: create a publisher if necessary - only one per InOrbit
@@ -162,7 +160,7 @@ def main(args = None):
     #         pub.publish(String("{}={}".format(key, val)))
 
     # rospy.loginfo('Republisher started')
-    # rospy.spin()
+    rclpy.spin(node)
     # rospy.loginfo('Republisher shutting down')
 
     # # Disconnect subs and pubs
