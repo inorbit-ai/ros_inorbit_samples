@@ -27,6 +27,7 @@
 
 #import json
 import rclpy
+from rosidl_runtime_py.utilities import get_message
 #import genpy
 #import yaml
 #import rospkg
@@ -65,73 +66,75 @@ def main(args = None):
         node.get_logger().info("Using config from config file: {}".format(config_file))
         config_yaml = open(config_file, "r")
     #config = yaml.safe_load(config_yaml)
+    config = {}
 
-    # # Go through republisher configurations
-    # # For each of them: create a publisher if necessary - only one per InOrbit
-    # # custom data field - and a matching subscriber to receive and republish
-    # # the desired fields.
+    # Go through republisher configurations
+    # For each of them: create a publisher if necessary - only one per InOrbit
+    # custom data field - and a matching subscriber to receive and republish
+    # the desired fields.
 
-    # # Dictionary of publisher instances by topic name
-    # pubs = {}
+    # Dictionary of publisher instances by topic name
+    pubs = {}
 
-    # # Dictionary of subscriber instances by topic name
-    # subs = {}
+    # Dictionary of subscriber instances by topic name
+    subs = {}
 
     # # In case we want to query ROS package options
     # rospack = rospkg.RosPack()
 
-    # # Set-up ROS topic republishers
-    # republishers = config.get('republishers', ())
-    # for repub in republishers:
+    # Set-up ROS topic republishers
+    republishers = config.get('republishers', ())
+    for repub in republishers:
 
-    #     # Load subscriber message type
-    #     msg_class = get_message_class(repub['msg_type'])
-    #     if msg_class is None:
-    #         rospy.logwarn('Failed to load msg class for {}'.format(repub['msg_type']))
-    #         continue
+        # Load subscriber message type
+        msg_class = get_message(repub['msg_type'])
+        if msg_class is None:
+            rospy.logwarn('Failed to load msg class for {}'.format(repub['msg_type']))
+            continue
 
-    #     # Create publisher for each new seen outgoing topic
-    #     for mapping in repub['mappings']:
-    #         out_topic = mapping['out']['topic']
-    #         if not out_topic in pubs:
-    #             pubs[out_topic] = rospy.Publisher(out_topic, String, queue_size=100)
-    #         mapping['attrgetter'] = attrgetter(mapping['field'])
+        # Create publisher for each new seen outgoing topic
+        for mapping in repub['mappings']:
+            out_topic = mapping['out']['topic']
+            if not out_topic in pubs:
+                pubs[out_topic] = rospy.Publisher(out_topic, String, queue_size=100)
+            mapping['attrgetter'] = attrgetter(mapping['field'])
 
-    #     # Prepare callback to relay messages through InOrbit custom data
-    #     def callback(msg, repub=repub):
+        # Prepare callback to relay messages through InOrbit custom data
+        def callback(msg, repub=repub):
 
-    #         for mapping in repub['mappings']:
-    #             key = mapping['out']['key']
-    #             val = None
-    #             mapping_type = mapping.get('mapping_type', MAPPING_TYPE_SINGLE_FIELD)
-    #             topic = mapping['out']['topic']
+            for mapping in repub['mappings']:
+                key = mapping['out']['key']
+                val = None
+                mapping_type = mapping.get('mapping_type', MAPPING_TYPE_SINGLE_FIELD)
+                topic = mapping['out']['topic']
 
-    #             if mapping_type == MAPPING_TYPE_SINGLE_FIELD:
-    #                 # TODO(adamantivm) Exception handling
-    #                 field = extract_value(msg, attrgetter(mapping['field']))
-    #                 val = process_single_field(field, mapping)
+                if mapping_type == MAPPING_TYPE_SINGLE_FIELD:
+                    # TODO(adamantivm) Exception handling
+                    field = extract_value(msg, attrgetter(mapping['field']))
+                    val = process_single_field(field, mapping)
 
-    #             elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
-    #                 field = extract_value(msg, attrgetter(mapping['field']))
-    #                 val = process_array(field, mapping)
+                elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
+                    field = extract_value(msg, attrgetter(mapping['field']))
+                    val = process_array(field, mapping)
 
-    #             elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
-    #                 try:
-    #                     val = extract_values_as_dict(msg, mapping)
-    #                     # extract_values_as_dict has the ability to filter messages and
-    #                     # returns None when an element doesn't pass the filter
-    #                     if val:
-    #                       val = json.dumps(val)
-    #                 except TypeError as e:
-    #                     rospy.logwarn("Failed to serialize message: %s", e)
+                elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
+                    try:
+                        val = extract_values_as_dict(msg, mapping)
+                        # extract_values_as_dict has the ability to filter messages and
+                        # returns None when an element doesn't pass the filter
+                        if val:
+                            val = json.dumps(val)
+                    except TypeError as e:
+                        rospy.logwarn("Failed to serialize message: %s", e)
 
-    #             if val is not None:
-    #                 pubs[topic].publish("{}={}".format(key, val))
+                if val is not None:
+                    pubs[topic].publish("{}={}".format(key, val))
 
-    #     in_topic = repub['topic']
+        in_topic = repub['topic']
 
-    #     # subscribe
-    #     subs[in_topic] = rospy.Subscriber(in_topic, msg_class, callback)
+        # subscribe
+        # TODO(adamantivm) Read QOS from config instead of using hardcoded value
+        subs[in_topic] = node.create_subscription(in_topic, msg_class, callback, 10)
 
     # # Set-up static publishers
     # static_publishers = config.get('static_publishers', ())
