@@ -25,11 +25,11 @@
 # It uses a YAML-based configuration to map between arbitrary
 # ROS topics into InOrbit key/value custom data topics.
 
-#import json
+import json
 import rclpy
 from rosidl_runtime_py.utilities import get_message
 #import genpy
-#import yaml
+import yaml
 #import rospkg
 #import os
 #from std_msgs.msg import String
@@ -65,8 +65,7 @@ def main(args = None):
             'config').get_parameter_value().string_value
         node.get_logger().info("Using config from config file: {}".format(config_file))
         config_yaml = open(config_file, "r")
-    #config = yaml.safe_load(config_yaml)
-    config = {}
+    config = yaml.safe_load(config_yaml)
 
     # Go through republisher configurations
     # For each of them: create a publisher if necessary - only one per InOrbit
@@ -96,7 +95,8 @@ def main(args = None):
         for mapping in repub['mappings']:
             out_topic = mapping['out']['topic']
             if not out_topic in pubs:
-                pubs[out_topic] = rospy.Publisher(out_topic, String, queue_size=100)
+                # NOTE(adamantivm) Using QOS = 10 to match InOrbit Custom Data topic spec
+                pubs[out_topic] = node.create_publisher(String, out_topic, 10)
             mapping['attrgetter'] = attrgetter(mapping['field'])
 
         # Prepare callback to relay messages through InOrbit custom data
@@ -125,7 +125,7 @@ def main(args = None):
                         if val:
                             val = json.dumps(val)
                     except TypeError as e:
-                        rospy.logwarn("Failed to serialize message: %s", e)
+                        node.get_logger().warning(f"Failed to serialize message: {e}")
 
                 if val is not None:
                     pubs[topic].publish("{}={}".format(key, val))
@@ -162,9 +162,9 @@ def main(args = None):
     #         pub = LatchPublisher(topic, String, queue_size=100)
     #         pub.publish(String("{}={}".format(key, val)))
 
-    # rospy.loginfo('Republisher started')
+    node.get_logger().info("Republisher started")
     rclpy.spin(node)
-    # rospy.loginfo('Republisher shutting down')
+    node.get_logger().info("Republisher shutting down")
 
     # # Disconnect subs and pubs
     # for sub in subs.values():
