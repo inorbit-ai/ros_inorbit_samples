@@ -18,7 +18,7 @@ republishers:
     mapping_type: "array_of_fields"
     mapping_options:
       fields: ["level", "hardware_id"]
-      filter: 'lambda x: (x.level == 1 or x.level == 2)'
+      filter: 'lambda x: (x.level == bytes(1) or x.level == bytes(0))'
     out:
       topic: "/inorbit/diagnostics_test"
       key: "diagnostics_status"
