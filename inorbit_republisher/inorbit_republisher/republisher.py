@@ -115,7 +115,7 @@ def main(args = None):
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
-                    val = process_array(field, mapping)
+                    val = process_array(field, mapping, node)
 
                 elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
                     try:
@@ -268,6 +268,31 @@ def process_array(field, mapping):
             if isinstance(obj[key], bytes):
                 obj[key] = obj[key].decode()
     return json.dumps(values)
+
+
+"""
+Converts objects with the shape:
+
+  { key1: value1, data: [ key2:value2, key3:value3, ]}
+  or
+  { key1: value1, key2:value2, ..}
+
+to JSON taking into account that fields with "byte" type of data
+need to be decoded
+"""
+
+
+def safe_json_dumps(values):
+  # Handles extract_values_as_dict case
+  for k, v in values:
+      if isinstance(v, bytes):
+          values[k] = v.decode()
+      # Handles process_array case
+      if isinstance(v, list) and k == 'data':
+          for obj in v:
+              for key in obj:
+                  if isinstance(obj[key], bytes):
+                      obj[key] = obj[key].decode()
 
 
 # """
