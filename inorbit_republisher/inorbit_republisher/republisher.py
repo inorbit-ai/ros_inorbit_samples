@@ -115,7 +115,7 @@ def main(args = None):
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
-                    val = process_array(field, mapping)
+                    val = process_array(field, mapping, node)
 
                 elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
                     try:
@@ -237,7 +237,9 @@ Processes a given array field from the ROS message and:
 Note that the array fields to retrieve should have a String value in order to
 serialize them properly.
 """
-def process_array(field, mapping):
+
+
+def process_array(field, mapping, node):
     # Output array of objects
     values = {
         'data': []
@@ -258,7 +260,13 @@ def process_array(field, mapping):
         values['data'] = [{f: extract_value(elem, attrgetter(f)) for f in fields} for elem in filtered_array]
     else:
         values['data'] = filtered_array
-
+    # TODO(Elvio): json.dumps() expects strings in its input https://docs.python.org/3/library/json.html#json.dumps
+    # the following code is a workaround to transform byte values inside the data field (list of dicts) to decoded strings
+    # the performance of this code could be improved if this data transformation is done when filtered_array is built
+    for obj in values['data']:
+        for key in obj:
+            if isinstance(obj[key], bytes):
+                obj[key] = obj[key].decode()
     return json.dumps(values)
 
 
