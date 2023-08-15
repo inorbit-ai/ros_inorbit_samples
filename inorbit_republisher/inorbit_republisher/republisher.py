@@ -129,7 +129,7 @@ def main(args = None):
 
                 if val is not None:
                     msg = String()
-                    msg. data = f"{key}={val}"
+                    msg.data = f"{key}={val}"
                     pubs[topic].publish(msg)
 
         in_topic = repub['topic']
