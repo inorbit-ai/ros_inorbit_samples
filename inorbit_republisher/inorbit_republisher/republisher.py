@@ -239,7 +239,7 @@ serialize them properly.
 """
 
 
-def process_array(field, mapping, node):
+def process_array(field, mapping):
     # Output array of objects
     values = {
         'data': []
