@@ -34,7 +34,7 @@ import yaml
 #import os
 #from std_msgs.msg import String
 #from roslib.message import get_message_class
-#from operator import attrgetter
+from operator import attrgetter
 
 # Types of mappings allowed
 MAPPING_TYPE_SINGLE_FIELD = "single_field"
@@ -119,7 +119,7 @@ def main(args = None):
 
                 elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
                     try:
-                        val = extract_values_as_dict(msg, mapping)
+                        val = extract_values_as_dict(msg, mapping, node)
                         # extract_values_as_dict has the ability to filter messages and
                         # returns None when an element doesn't pass the filter
                         if val:
@@ -173,38 +173,46 @@ def main(args = None):
     # for pub in pubs.values():
     #     pub.unregister()
 
-# """
-# Extracts a value from the given message using the provided getter function
-# """
-# def extract_value(msg, getter_fn):
-#     # TODO(adamantivm) Graceful handling of missing values to extract
-#     # TODO(adamantivm) Allow serialization of complex values
-#     val = getter_fn(msg)
-#     return val
 
-# """
-# Extracts several values from a given nested msg field and returns a dictionary of
-# <field, value> elements
-# """
-# def extract_values_as_dict(msg, mapping):
-#     values = {}
-#     base_getter_fn = attrgetter(mapping['field'])
-#     base_value = base_getter_fn(msg)
-#     fields = mapping.get('mapping_options', {}).get('fields')
-#     for field in fields:
-#         getter_fn = attrgetter(field)
-#         try:
-#             val = getter_fn(base_value)
-#             # genpy.Time values can't be serialized into JSON. convert them to seconds
-#             # TODO(diegobatt): Catch other datatypes
-#             if isinstance(val, genpy.Time):
-#                 val = val.to_sec()
-#             # TODO(diegobatt): Make it possible to use a different key than the field
-#             values[field] = val
-#         except AttributeError as e:
-#             rospy.logwarn('Couldn\'t get attribute %s: %s', field, e)
-#     filter_fn = mapping.get('mapping_options', {}).get('filter')
-#     return values if not filter_fn or eval(filter_fn)(values) else None
+"""
+Extracts a value from the given message using the provided getter function
+"""
+
+
+def extract_value(msg, getter_fn):
+    # TODO(adamantivm) Graceful handling of missing values to extract
+    # TODO(adamantivm) Allow serialization of complex values
+    val = getter_fn(msg)
+    return val
+
+
+"""
+Extracts several values from a given nested msg field and returns a dictionary of
+<field, value> elements
+"""
+
+# TODO(Elvio): after refactoring and using Node as classes
+# remove the node from this function and figure out a better way
+# to log warnings inside
+def extract_values_as_dict(msg, mapping, node):
+    values = {}
+    base_getter_fn = attrgetter(mapping['field'])
+    base_value = base_getter_fn(msg)
+    fields = mapping.get('mapping_options', {}).get('fields')
+    for field in fields:
+        getter_fn = attrgetter(field)
+        try:
+            val = getter_fn(base_value)
+            # genpy.Time values can't be serialized into JSON. convert them to seconds
+            # TODO(diegobatt): Catch other datatypes
+            if isinstance(val, genpy.Time):
+                val = val.to_sec()
+            # TODO(diegobatt): Make it possible to use a different key than the field
+            values[field] = val
+        except AttributeError as e:
+            node.get_logger().warning(f"Couldn\'t get attribute {field}: {e}")
+    filter_fn = mapping.get('mapping_options', {}).get('filter')
+    return values if not filter_fn or eval(filter_fn)(values) else None
 
 # """
 # Processes a scalar value before publishing according to mapping options
