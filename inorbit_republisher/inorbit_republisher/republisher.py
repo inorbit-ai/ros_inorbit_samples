@@ -131,10 +131,15 @@ def main(args = None):
                     pubs[topic].publish("{}={}".format(key, val))
 
         in_topic = repub['topic']
+        # Reads QoS from the topic settings
+        in_qos = repub['qos']
+        if in_qos is None:
+            node.get_logger().warning(f"no QoS value found for topic {in_topic}")
+            
 
         # subscribe
         # TODO(adamantivm) Read QOS from config instead of using hardcoded value
-        subs[in_topic] = node.create_subscription(in_topic, msg_class, callback, 10)
+        subs[in_topic] = node.create_subscription(in_topic, msg_class, callback, in_qos)
 
     # # Set-up static publishers
     # static_publishers = config.get('static_publishers', ())
