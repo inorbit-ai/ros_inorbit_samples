@@ -23,27 +23,27 @@ republishers:
       topic: "/inorbit/diagnostics_test"
       key: "diagnostics_status"
 
-# - topic: "/cmd_vel"
-#   qos: 5
-#   msg_type: "geometry_msgs/Twist"
-#   mappings:
-#   - field: "linear"
-#     mapping_type: "json_of_fields"
-#     mapping_options:
-#       fields: ["x", "y", "z"]
-#       filter: 'lambda vel: (vel["x"] > 0)'
-#     out:
-#       topic: "/inorbit/linear_vel_test"
-#       key: "linear_vel"
-# - topic: "/map_metadata"
-#   latched: true
-#   msg_type: "nav_msgs/MapMetaData"
-#   mappings:
-#   - field: "resolution"
-#     mapping_type: "single_field"
-#     out:
-#       topic: "/inorbit/map_res_test"
-#       key: "map_resolution"
+- topic: "/cmd_vel"
+  qos: 10
+  msg_type: "geometry_msgs/msg/Twist"
+  mappings:
+  - field: "linear"
+    mapping_type: "json_of_fields"
+    mapping_options:
+      fields: ["x", "y", "z"]
+      filter: 'lambda vel: (vel["x"] > 0)'
+    out:
+      topic: "/inorbit/linear_vel_test"
+      key: "linear_vel"
+- topic: "/map_metadata"
+  latched: true
+  msg_type: "nav_msgs/msg/MapMetaData"
+  mappings:
+  - field: "resolution"
+    mapping_type: "single_field"
+    out:
+      topic: "/inorbit/map_res_test"
+      key: "map_resolution"
 
 # static_publishers:
 # - value_from:

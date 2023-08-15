@@ -28,12 +28,11 @@
 import json
 import rclpy
 from rosidl_runtime_py.utilities import get_message
-#import genpy
 import yaml
 #import rospkg
 #import os
 from std_msgs.msg import String
-#from roslib.message import get_message_class
+from builtin_interfaces.msg import Time
 from operator import attrgetter
 
 # Types of mappings allowed
@@ -112,6 +111,9 @@ def main(args = None):
                     # TODO(adamantivm) Exception handling
                     field = extract_value(msg, attrgetter(mapping['field']))
                     val = process_single_field(field, mapping)
+                    # Time values can't be cleanly serialized into JSON. convert them to milliseconds
+                    if isinstance(val, Time):
+                        val = rclpy.time.Time.from_msg(val).nanoseconds / 1000000
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
@@ -169,19 +171,13 @@ def main(args = None):
     rclpy.spin(node)
     node.get_logger().info("Republisher shutting down")
 
-    # # Disconnect subs and pubs
-    # for sub in subs.values():
-    #     sub.unregister()
-
-    # for pub in pubs.values():
-    #     pub.unregister()
-
+    node.destroy_node()
+    rclpy.shutdown()
+    node.get_logger().info("Shutdown complete")
 
 """
 Extracts a value from the given message using the provided getter function
 """
-
-
 def extract_value(msg, getter_fn):
     # TODO(adamantivm) Graceful handling of missing values to extract
     # TODO(adamantivm) Allow serialization of complex values
@@ -193,7 +189,6 @@ def extract_value(msg, getter_fn):
 Extracts several values from a given nested msg field and returns a dictionary of
 <field, value> elements
 """
-
 # TODO(Elvio): after refactoring and using Node as classes
 # remove the node from this function and figure out a better way
 # to log warnings inside
@@ -206,10 +201,10 @@ def extract_values_as_dict(msg, mapping, node):
         getter_fn = attrgetter(field)
         try:
             val = getter_fn(base_value)
-            # genpy.Time values can't be serialized into JSON. convert them to seconds
-            # TODO(diegobatt): Catch other datatypes
-            if isinstance(val, genpy.Time):
-                val = val.to_sec()
+            # Time values aren't cleanly serialized into JSON.
+            # Convert them to milliseconds
+            if isinstance(val, Time):
+                val = rclpy.time.Time.from_msg(val).nanoseconds / 1000000
             # TODO(diegobatt): Make it possible to use a different key than the field
             values[field] = val
         except AttributeError as e:
