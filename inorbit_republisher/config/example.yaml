@@ -11,6 +11,7 @@ republishers:
       key: "rosout_msg"
 
 - topic: "/diagnostics"
+  qos: 10
   msg_type: "diagnostic_msgs/DiagnosticArray"
   mappings:
   - field: "status"
@@ -23,6 +24,7 @@ republishers:
       key: "diagnostics_status"
 
 - topic: "/cmd_vel"
+  qos: 5
   msg_type: "geometry_msgs/Twist"
   mappings:
   - field: "linear"
