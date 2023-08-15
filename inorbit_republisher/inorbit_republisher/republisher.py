@@ -45,6 +45,18 @@ STATIC_VALUE_FROM_PACKAGE_VERSION = "package_version"
 STATIC_VALUE_FROM_ENVIRONMENT_VAR = "environment_variable"
 
 """
+Custom JSON encoder to deal with types found on ROS 2 messages that are not
+serializable to string by default.
+For now this includes:
+ - bytes objects to decoded String objects
+"""
+class ROS2JSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            return obj.decode()
+        return json.JSONEncoder.default(self, obj)
+
+"""
 Main node entry point.
 
 Currently a simple function that does everything.
@@ -117,7 +129,7 @@ def main(args = None):
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
-                    val = process_array(field, mapping, node)
+                    val = process_array(field, mapping)
 
                 elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
                     try:
@@ -125,7 +137,7 @@ def main(args = None):
                         # extract_values_as_dict has the ability to filter messages and
                         # returns None when an element doesn't pass the filter
                         if val:
-                            val = json.dumps(val)
+                            val = json.dumps(val, cls=ROS2JSONEncoder)
                     except TypeError as e:
                         node.get_logger().warning(f"Failed to serialize message: {e}")
 
@@ -232,8 +244,6 @@ Processes a given array field from the ROS message and:
 Note that the array fields to retrieve should have a String value in order to
 serialize them properly.
 """
-
-
 def process_array(field, mapping):
     # Output array of objects
     values = {
@@ -255,40 +265,7 @@ def process_array(field, mapping):
         values['data'] = [{f: extract_value(elem, attrgetter(f)) for f in fields} for elem in filtered_array]
     else:
         values['data'] = filtered_array
-    # TODO(Elvio): json.dumps() expects strings in its input https://docs.python.org/3/library/json.html#json.dumps
-    # the following code is a workaround to transform byte values inside the data field (list of dicts) to decoded strings
-    # the performance of this code could be improved if this data transformation is done when filtered_array is built
-    for obj in values['data']:
-        for key in obj:
-            if isinstance(obj[key], bytes):
-                obj[key] = obj[key].decode()
-    return json.dumps(values)
-
-
-"""
-Converts objects with the shape:
-
-  { key1: value1, data: [ key2:value2, key3:value3, ]}
-  or
-  { key1: value1, key2:value2, ..}
-
-to JSON taking into account that fields with "byte" type of data
-need to be decoded
-"""
-
-
-def safe_json_dumps(values):
-  # Handles extract_values_as_dict case
-  for k, v in values:
-      if isinstance(v, bytes):
-          values[k] = v.decode()
-      # Handles process_array case
-      if isinstance(v, list) and k == 'data':
-          for obj in v:
-              for key in obj:
-                  if isinstance(obj[key], bytes):
-                      obj[key] = obj[key].decode()
-
+    return json.dumps(values, cls=ROS2JSONEncoder)
 
 # """
 # Wrapper class to allow publishing more than one latched message over the same topic, working
