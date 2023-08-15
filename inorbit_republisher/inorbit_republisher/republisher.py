@@ -111,9 +111,9 @@ def main(args = None):
                     # TODO(adamantivm) Exception handling
                     field = extract_value(msg, attrgetter(mapping['field']))
                     val = process_single_field(field, mapping)
-                    # Time values can't be cleanly serialized into JSON. convert them to nanoseconds
+                    # Time values can't be cleanly serialized into JSON. convert them to milliseconds
                     if isinstance(val, Time):
-                        val = val.sec * 1000 + int(val.nanosec / 1000000)
+                        val = rclpy.time.Time.from_msg(val).nanoseconds / 1000000
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
@@ -204,7 +204,7 @@ def extract_values_as_dict(msg, mapping, node):
             # Time values aren't cleanly serialized into JSON.
             # Convert them to milliseconds
             if isinstance(val, Time):
-                val = val.sec * 1000 + int(val.nanosec / 1000000)
+                val = rclpy.time.Time.from_msg(val).nanoseconds / 1000000
             # TODO(diegobatt): Make it possible to use a different key than the field
             values[field] = val
         except AttributeError as e:
