@@ -1,17 +1,17 @@
 republishers:
 - topic: "/rosout"
-  msg_type: "rosgraph_msgs/Log"
+  msg_type: "rcl_interfaces/msg/Log"
   mappings:
   - field: "msg"
     mapping_type: "single_field"
     mapping_options:
       filter: 'lambda x: x != "Go"'
     out:
-      topic: "/inorbit/custom_data/0"
+      topic: "/inorbit/custom_data"
       key: "rosout_msg"
 
 - topic: "/diagnostics"
-  msg_type: "diagnostic_msgs/DiagnosticArray"
+  msg_type: "diagnostic_msgs/msg/DiagnosticArray"
   mappings:
   - field: "status"
     mapping_type: "array_of_fields"
@@ -22,45 +22,45 @@ republishers:
       topic: "/inorbit/diagnostics_test"
       key: "diagnostics_status"
 
-- topic: "/cmd_vel"
-  msg_type: "geometry_msgs/Twist"
-  mappings:
-  - field: "linear"
-    mapping_type: "json_of_fields"
-    mapping_options:
-      fields: ["x", "y", "z"]
-      filter: 'lambda vel: (vel["x"] > 0)'
-    out:
-      topic: "/inorbit/linear_vel_test"
-      key: "linear_vel"
+# - topic: "/cmd_vel"
+#   msg_type: "geometry_msgs/Twist"
+#   mappings:
+#   - field: "linear"
+#     mapping_type: "json_of_fields"
+#     mapping_options:
+#       fields: ["x", "y", "z"]
+#       filter: 'lambda vel: (vel["x"] > 0)'
+#     out:
+#       topic: "/inorbit/linear_vel_test"
+#       key: "linear_vel"
 
-- topic: "/map_metadata"
-  latched: true
-  msg_type: "nav_msgs/MapMetaData"
-  mappings:
-  - field: "resolution"
-    mapping_type: "single_field"
-    out:
-      topic: "/inorbit/map_res_test"
-      key: "map_resolution"
+# - topic: "/map_metadata"
+#   latched: true
+#   msg_type: "nav_msgs/MapMetaData"
+#   mappings:
+#   - field: "resolution"
+#     mapping_type: "single_field"
+#     out:
+#       topic: "/inorbit/map_res_test"
+#       key: "map_resolution"
 
-static_publishers:
-- value_from:
-    package_version: "rospy"
-  out:
-    topic: "/inorbit/custom_data/0"
-    key: "rospy_version"
-- value_from:
-    package_version: "inorbit_republisher"
-  out:
-    topic: "/inorbit/custom_data/0"
-    key: "inorbit_republisher_version"
-- value_from:
-    environment_variable: "PYTHONPATH"
-  out:
-    topic: "/inorbit/custom_data/0"
-    key: "python_path"
-- value: "let's republish in orbit"
-  out:
-    topic: "/inorbit/custom_data/0"
-    key: "greeting"
+# static_publishers:
+# - value_from:
+#     package_version: "rospy"
+#   out:
+#     topic: "/inorbit/custom_data/0"
+#     key: "rospy_version"
+# - value_from:
+#     package_version: "inorbit_republisher"
+#   out:
+#     topic: "/inorbit/custom_data/0"
+#     key: "inorbit_republisher_version"
+# - value_from:
+#     environment_variable: "PYTHONPATH"
+#   out:
+#     topic: "/inorbit/custom_data/0"
+#     key: "python_path"
+# - value: "let's republish in orbit"
+#   out:
+#     topic: "/inorbit/custom_data/0"
+#     key: "greeting"
