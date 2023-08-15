@@ -191,7 +191,9 @@ Extracts several values from a given nested msg field and returns a dictionary o
 <field, value> elements
 """
 
-
+# TODO(Elvio): after refactoring and using Node as classes
+# remove the node from this function and figure out a better way
+# to log warnings inside
 def extract_values_as_dict(msg, mapping, node):
     values = {}
     base_getter_fn = attrgetter(mapping['field'])
