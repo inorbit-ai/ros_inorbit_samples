@@ -29,8 +29,7 @@ import json
 import rclpy
 from rosidl_runtime_py.utilities import get_message
 import yaml
-#import rospkg
-#import os
+import os
 from std_msgs.msg import String
 from builtin_interfaces.msg import Time
 from operator import attrgetter
@@ -153,31 +152,35 @@ def main(args = None):
         # subscribe
         subs[in_topic] = node.create_subscription(msg_class, in_topic, callback, in_qos)
 
-    # # Set-up static publishers
-    # static_publishers = config.get('static_publishers', ())
-    # for static_pub_config in static_publishers:
-    #     key = static_pub_config['out']['key']
-    #     topic = static_pub_config['out']['topic']
+    # Set-up static publishers
+    static_publishers = config.get('static_publishers', ())
+    for static_pub_config in static_publishers:
+        key = static_pub_config['out']['key']
+        topic = static_pub_config['out']['topic']
 
-    #     # If a literal value is provided, it takes highest precendence
-    #     val = static_pub_config.get('value')
+        # If a literal value is provided, it takes highest precendence
+        val = static_pub_config.get('value')
 
-    #     # Otherwise, fetch the value from the specified source
-    #     if val is None:
-    #         value_from = static_pub_config.get('value_from')
-    #         if STATIC_VALUE_FROM_PACKAGE_VERSION in value_from:
-    #             pkg_name = value_from[STATIC_VALUE_FROM_PACKAGE_VERSION]
-    #             # TODO(adamantivm) Exception handling
-    #             pkg_manifest = rospack.get_manifest(pkg_name)
-    #             val = pkg_manifest.version
-    #         elif STATIC_VALUE_FROM_ENVIRONMENT_VAR in value_from:
-    #             var_name = value_from[STATIC_VALUE_FROM_ENVIRONMENT_VAR]
-    #             val = os.environ.get(var_name)
+        # Otherwise, fetch the value from the specified source
+        if val is None:
+            value_from = static_pub_config.get('value_from')
+            if STATIC_VALUE_FROM_ENVIRONMENT_VAR in value_from:
+                var_name = value_from[STATIC_VALUE_FROM_ENVIRONMENT_VAR]
+                val = os.environ.get(var_name)
+            # TODO(adamantivm) Implement publishing of package version for ROS 2
+            # elif STATIC_VALUE_FROM_PACKAGE_VERSION in value_from:
+            #     pkg_name = value_from[STATIC_VALUE_FROM_PACKAGE_VERSION]
+            #     # TODO(adamantivm) Exception handling
+            #     pkg_manifest = rospack.get_manifest(pkg_name)
+            #     val = pkg_manifest.version
 
-    #     # If there is a value to publish, publish it using once per subscriber
-    #     if val is not None:
-    #         pub = LatchPublisher(topic, String, queue_size=100)
-    #         pub.publish(String("{}={}".format(key, val)))
+        # If there is a value to publish, publish it using once per subscriber
+        # TODO(adamantivm) Make these values latched
+        if val is not None:
+            pub = node.create_publisher(String, topic, 10)
+            msg = String()
+            msg.data = f"{key}={val}"
+            pub.publish(msg)
 
     node.get_logger().info("Republisher started")
     rclpy.spin(node)
@@ -266,24 +269,6 @@ def process_array(field, mapping):
     else:
         values['data'] = filtered_array
     return json.dumps(values, cls=ROS2JSONEncoder)
-
-# """
-# Wrapper class to allow publishing more than one latched message over the same topic, working
-# around a rospy limitation caused by the use of Publisher singletons.
-# For more details see: https://github.com/ros/ros_comm/issues/146#issuecomment-307507271
-# """
-# class LatchPublisher(rospy.Publisher, rospy.SubscribeListener):
-#     def __init__(self, name, data_class, tcp_nodelay=False, headers=None, queue_size=None):
-#         super(LatchPublisher, self).__init__(name, data_class=data_class, tcp_nodelay=tcp_nodelay, headers=headers, queue_size=queue_size, subscriber_listener=self, latch=False)
-#         self.message = None
-
-#     def publish(self, msg):
-#         self.message = msg
-#         super(LatchPublisher, self).publish(msg)
-
-#     def peer_subscribe(self, resolved_name, publish, publish_single):
-#         if self.message is not None:
-#             publish_single(self.message)
 
 if __name__ == '__main__':
     main()

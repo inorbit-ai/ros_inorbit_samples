@@ -45,7 +45,7 @@ republishers:
       topic: "/inorbit/map_res_test"
       key: "map_resolution"
 
-# static_publishers:
+static_publishers:
 # - value_from:
 #     package_version: "rospy"
 #   out:
@@ -56,12 +56,12 @@ republishers:
 #   out:
 #     topic: "/inorbit/custom_data/0"
 #     key: "inorbit_republisher_version"
-# - value_from:
-#     environment_variable: "PYTHONPATH"
-#   out:
-#     topic: "/inorbit/custom_data/0"
-#     key: "python_path"
-# - value: "let's republish in orbit"
-#   out:
-#     topic: "/inorbit/custom_data/0"
-#     key: "greeting"
+- value_from:
+    environment_variable: "PYTHONPATH"
+  out:
+    topic: "/inorbit/custom_data/static"
+    key: "python_path"
+- value: "let's republish in orbit"
+  out:
+    topic: "/inorbit/custom_data/static"
+    key: "greeting"
