@@ -89,7 +89,7 @@ def main(args = None):
         # Load subscriber message type
         msg_class = get_message(repub['msg_type'])
         if msg_class is None:
-            rospy.logwarn('Failed to load msg class for {}'.format(repub['msg_type']))
+            node.get_logger().warning('Failed to load msg class for {}'.format(repub['msg_type']))
             continue
 
         # Create publisher for each new seen outgoing topic
