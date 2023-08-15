@@ -115,7 +115,7 @@ def main(args = None):
 
                 elif mapping_type == MAPPING_TYPE_ARRAY_OF_FIELDS:
                     field = extract_value(msg, attrgetter(mapping['field']))
-                    val = process_array(field, mapping, node)
+                    val = process_array(field, mapping)
 
                 elif mapping_type == MAPPING_TYPE_JSON_OF_FIELDS:
                     try:
