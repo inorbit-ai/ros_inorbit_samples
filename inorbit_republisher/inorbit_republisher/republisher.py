@@ -32,7 +32,7 @@ from rosidl_runtime_py.utilities import get_message
 import yaml
 #import rospkg
 #import os
-#from std_msgs.msg import String
+from std_msgs.msg import String
 #from roslib.message import get_message_class
 from operator import attrgetter
 
@@ -128,14 +128,16 @@ def main(args = None):
                         node.get_logger().warning(f"Failed to serialize message: {e}")
 
                 if val is not None:
-                    pubs[topic].publish("{}={}".format(key, val))
+                    msg = String()
+                    msg.data = f"{key}={val}"
+                    pubs[topic].publish(msg)
 
         in_topic = repub['topic']
         # Reads QoS from the topic settings
         in_qos = getattr(repub, 'qos', 10)
 
         # subscribe
-        subs[in_topic] = node.create_subscription(in_topic, msg_class, callback, in_qos)
+        subs[in_topic] = node.create_subscription(msg_class, in_topic, callback, in_qos)
 
     # # Set-up static publishers
     # static_publishers = config.get('static_publishers', ())
@@ -215,49 +217,49 @@ def extract_values_as_dict(msg, mapping, node):
     filter_fn = mapping.get('mapping_options', {}).get('filter')
     return values if not filter_fn or eval(filter_fn)(values) else None
 
-# """
-# Processes a scalar value before publishing according to mapping options
-#  - If a 'filter' function is provided, it returns the value only if the
-#    result of passing the field value through the filter function is True,
-#    otherwise it returns None
-# """
-# def process_single_field(field_value, mapping):
-#     filter_fn = mapping.get('mapping_options', {}).get('filter')
-#     return field_value if not filter_fn or eval(filter_fn)(field_value) else None
+"""
+Processes a scalar value before publishing according to mapping options
+ - If a 'filter' function is provided, it returns the value only if the
+   result of passing the field value through the filter function is True,
+   otherwise it returns None
+"""
+def process_single_field(field_value, mapping):
+    filter_fn = mapping.get('mapping_options', {}).get('filter')
+    return field_value if not filter_fn or eval(filter_fn)(field_value) else None
 
-# """
-# Processes a given array field from the ROS message and:
-#     - Filters it using the 'filter' function (if provided)
-#     - For each element, it gets the set of keys defined by array_fields
-#     - Returns a key/value with the value being a json string containing
-#       the resulting array of objects.
+"""
+Processes a given array field from the ROS message and:
+    - Filters it using the 'filter' function (if provided)
+    - For each element, it gets the set of keys defined by array_fields
+    - Returns a key/value with the value being a json string containing
+      the resulting array of objects.
 
-# Note that the array fields to retrieve should have a String value in order to
-# serialize them properly.
-# """
-# def process_array(field, mapping):
-#     # Output array of objects
-#     values = {
-#         'data': []
-#     }
+Note that the array fields to retrieve should have a String value in order to
+serialize them properly.
+"""
+def process_array(field, mapping):
+    # Output array of objects
+    values = {
+        'data': []
+    }
 
-#     filter_fn = mapping.get('mapping_options', {}).get('filter')
-#     if filter_fn:
-#         # Apply the filter function if any
-#         filtered_array = list(filter(eval(filter_fn), field))
-#     else:
-#         filtered_array = field
+    filter_fn = mapping.get('mapping_options', {}).get('filter')
+    if filter_fn:
+        # Apply the filter function if any
+        filtered_array = list(filter(eval(filter_fn), field))
+    else:
+        filtered_array = field
 
-#     # Get only the array_fields specified. If none was specified, return the whole array
-#     # TODO(FlorGrosso): check that the array fields are Strings and discard those  which
-#     # are not.
-#     if 'fields' in mapping.get('mapping_options', {}):
-#         fields = mapping['mapping_options']['fields']
-#         values['data'] = [{f: extract_value(elem, attrgetter(f)) for f in fields} for elem in filtered_array]
-#     else:
-#         values['data'] = filtered_array
+    # Get only the array_fields specified. If none was specified, return the whole array
+    # TODO(FlorGrosso): check that the array fields are Strings and discard those  which
+    # are not.
+    if 'fields' in mapping.get('mapping_options', {}):
+        fields = mapping['mapping_options']['fields']
+        values['data'] = [{f: extract_value(elem, attrgetter(f)) for f in fields} for elem in filtered_array]
+    else:
+        values['data'] = filtered_array
 
-#     return json.dumps(values)
+    return json.dumps(values)
 
 
 # """
