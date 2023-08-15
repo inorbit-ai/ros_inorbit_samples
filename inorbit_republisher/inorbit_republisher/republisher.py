@@ -45,6 +45,18 @@ STATIC_VALUE_FROM_PACKAGE_VERSION = "package_version"
 STATIC_VALUE_FROM_ENVIRONMENT_VAR = "environment_variable"
 
 """
+Custom JSON encoder to deal with types found on ROS 2 messages that are not
+serializable to string by default.
+For now this includes:
+ - bytes objects to decoded String objects
+"""
+class ROS2JSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            return obj.decode()
+        return json.JSONEncoder.default(self, obj)
+
+"""
 Main node entry point.
 
 Currently a simple function that does everything.
@@ -125,7 +137,7 @@ def main(args = None):
                         # extract_values_as_dict has the ability to filter messages and
                         # returns None when an element doesn't pass the filter
                         if val:
-                            val = json.dumps(val)
+                            val = json.dumps(val, cls=ROS2JSONEncoder)
                     except TypeError as e:
                         node.get_logger().warning(f"Failed to serialize message: {e}")
 
@@ -253,9 +265,7 @@ def process_array(field, mapping):
         values['data'] = [{f: extract_value(elem, attrgetter(f)) for f in fields} for elem in filtered_array]
     else:
         values['data'] = filtered_array
-
-    return json.dumps(values)
-
+    return json.dumps(values, cls=ROS2JSONEncoder)
 
 # """
 # Wrapper class to allow publishing more than one latched message over the same topic, working
