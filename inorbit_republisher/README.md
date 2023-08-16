@@ -12,7 +12,7 @@ Create a YAML config file specifying the mappings you would like to use using th
   republishers:
   - topic: "/fruits_per_cubic_m"
     qos: 5
-    msg_type: "fruit_msgs/Citrus"
+    msg_type: "fruit_msgs/msg/Citrus"
     mappings:
     - field: "num_oranges"
       mapping_type: "single_field"
@@ -20,7 +20,7 @@ Create a YAML config file specifying the mappings you would like to use using th
         topic: "/inorbit/custom_data/0"
         key: "oranges"
   - topic: "/hardware/status"
-    msg_type: "hw_msgs/HardwareStatus"
+    msg_type: "hw_msgs/msg/HardwareStatus"
     mappings:
     - field: "status"
       mapping_options:
