@@ -137,7 +137,7 @@ def main(args = None):
                         # extract_values_as_dict has the ability to filter messages and
                         # returns None when an element doesn't pass the filter
                         if val:
-                            val = json.dumps(val, cls=ROS2JSONEncoder)
+                          val = json.dumps(val, cls=ROS2JSONEncoder)
                     except TypeError as e:
                         node.get_logger().warning(f"Failed to serialize message: {e}")
 
