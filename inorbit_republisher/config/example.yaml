@@ -1,29 +1,31 @@
 republishers:
 - topic: "/rosout"
-  msg_type: "rosgraph_msgs/Log"
+  msg_type: "rcl_interfaces/msg/Log"
   mappings:
   - field: "msg"
     mapping_type: "single_field"
     mapping_options:
       filter: 'lambda x: x != "Go"'
     out:
-      topic: "/inorbit/custom_data/0"
+      topic: "/inorbit/custom_data"
       key: "rosout_msg"
 
 - topic: "/diagnostics"
-  msg_type: "diagnostic_msgs/DiagnosticArray"
+  qos: 10
+  msg_type: "diagnostic_msgs/msg/DiagnosticArray"
   mappings:
   - field: "status"
     mapping_type: "array_of_fields"
     mapping_options:
       fields: ["level", "hardware_id"]
-      filter: 'lambda x: (x.level == 1 or x.level == 2)'
+      filter: 'lambda x: (x.level == bytes(1) or x.level == bytes(0))'
     out:
       topic: "/inorbit/diagnostics_test"
       key: "diagnostics_status"
 
 - topic: "/cmd_vel"
-  msg_type: "geometry_msgs/Twist"
+  qos: 10
+  msg_type: "geometry_msgs/msg/Twist"
   mappings:
   - field: "linear"
     mapping_type: "json_of_fields"
@@ -33,10 +35,9 @@ republishers:
     out:
       topic: "/inorbit/linear_vel_test"
       key: "linear_vel"
-
 - topic: "/map_metadata"
   latched: true
-  msg_type: "nav_msgs/MapMetaData"
+  msg_type: "nav_msgs/msg/MapMetaData"
   mappings:
   - field: "resolution"
     mapping_type: "single_field"
@@ -45,22 +46,22 @@ republishers:
       key: "map_resolution"
 
 static_publishers:
-- value_from:
-    package_version: "rospy"
-  out:
-    topic: "/inorbit/custom_data/0"
-    key: "rospy_version"
-- value_from:
-    package_version: "inorbit_republisher"
-  out:
-    topic: "/inorbit/custom_data/0"
-    key: "inorbit_republisher_version"
+# - value_from:
+#     package_version: "rospy"
+#   out:
+#     topic: "/inorbit/custom_data/0"
+#     key: "rospy_version"
+# - value_from:
+#     package_version: "inorbit_republisher"
+#   out:
+#     topic: "/inorbit/custom_data/0"
+#     key: "inorbit_republisher_version"
 - value_from:
     environment_variable: "PYTHONPATH"
   out:
-    topic: "/inorbit/custom_data/0"
+    topic: "/inorbit/custom_data/static"
     key: "python_path"
 - value: "let's republish in orbit"
   out:
-    topic: "/inorbit/custom_data/0"
+    topic: "/inorbit/custom_data/static"
     key: "greeting"

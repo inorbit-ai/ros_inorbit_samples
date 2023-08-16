@@ -1,29 +1,13 @@
 <?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>inorbit_republisher</name>
-  <version>0.3.0</version>
-  <description>ROS to InOrbit topic republisher</description>
+  <version>0.2.5</version>
+  <description>ROS2 to InOrbit topic republisher</description>
   <maintainer email="support@inorbit.ai">InOrbit</maintainer>
   <license>MIT</license>
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>rospy</build_depend>
-  <build_depend>roslib</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend condition="$ROS_PYTHON_VERSION == 2">python-yaml</build_depend>
-  <build_depend condition="$ROS_PYTHON_VERSION == 3">python3-yaml</build_depend>
-  <build_export_depend>rospy</build_export_depend>
-  <build_export_depend>roslib</build_export_depend>
-  <build_export_depend>std_msgs</build_export_depend>
-  <build_export_depend>geometry_msgs</build_export_depend>
-  <build_export_depend condition="$ROS_PYTHON_VERSION == 2">python-yaml</build_export_depend>
-  <build_export_depend condition="$ROS_PYTHON_VERSION == 3">python3-yaml</build_export_depend>
-  <exec_depend>rospy</exec_depend>
-  <exec_depend condition="$ROS_PYTHON_VERSION == 2">python-rospkg</exec_depend>
-  <exec_depend condition="$ROS_PYTHON_VERSION == 3">python3-rospkg</exec_depend>
-  <exec_depend>roslib</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-  <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend condition="$ROS_PYTHON_VERSION == 2">python-yaml</exec_depend>
-  <exec_depend condition="$ROS_PYTHON_VERSION == 3">python3-yaml</exec_depend>
+  <exec_depend>ros2launch</exec_depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
 </package>

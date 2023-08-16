@@ -1,8 +1,8 @@
-# InOrbit republisher for ROS 1
+# InOrbit republisher for ROS 2
 
-This directory includes a republisher that allows mapping from arbitrary ROS values to ``InOrbit`` [custom data](https://www.inorbit.ai/faq#publish-custom-data) key/value pairs for application-specific observability.
+This directory includes a republisher that allows mapping from arbitrary ROS2 values to ``InOrbit`` [custom data](https://www.inorbit.ai/faq#publish-custom-data) key/value pairs for application-specific observability.
 
-Currently only mapping from ROS topics is supported. The republisher could be extended to map actions, services and parameters.
+Currently only mapping from ROS2 topics is supported. The republisher could be extended to map actions, services and parameters.
 
 ## Usage
 
@@ -11,15 +11,16 @@ Create a YAML config file specifying the mappings you would like to use using th
 ```yaml
   republishers:
   - topic: "/fruits_per_cubic_m"
-    msg_type: "fruit_msgs/Citrus"
+    qos: 5
+    msg_type: "fruit_msgs/msg/Citrus"
     mappings:
     - field: "num_oranges"
       mapping_type: "single_field"
       out:
-        topic: "/inorbit/custom_data/0"
+        topic: "/inorbit/custom_data/"
         key: "oranges"
   - topic: "/hardware/status"
-    msg_type: "hw_msgs/HardwareStatus"
+    msg_type: "hw_msgs/msg/HardwareStatus"
     mappings:
     - field: "status"
       mapping_options:
@@ -27,36 +28,29 @@ Create a YAML config file specifying the mappings you would like to use using th
         filter: 'lambda x: (x.status == 1)'
       mapping_type: "array_of_fields"
       out:
-        topic: "/inorbit/custom_data/0"
+        topic: "/inorbit/custom_data/"
         key: "hardware_error"
   - topic: "/cmd_vel"
-    msg_type: "geometry_msgs/Twist"
+    qos: 10
+    msg_type: "geometry_msgs/msg/Twist"
     mappings:
     - field: "linear"
       mapping_type: "json_of_fields"
       mapping_options:
         fields: ["x", "y", "z"]
+        filter: 'lambda vel: (vel["x"] > 0)'
       out:
         topic: "/inorbit/linear_vel_test"
         key: "linear_vel"
-  - topic: "/map_metadata"
-    latched: true
-    msg_type: "nav_msgs/MapMetaData"
-    mappings:
-    - field: "resolution"
-      mapping_type: "single_field"
-      out:
-        topic: "/inorbit/map_res_test"
-        key: "map_resolution"
   static_publishers:
   - value: "this is a fixed string"
     out:
-      topic: "/inorbit/custom_data/0"
+      topic: "/inorbit/custom_data/"
       key: "greeting"
   - value_from:
       environment_variable: "PATH"
     out:
-      topic: "/inorbit/custom_data/0"
+      topic: "/inorbit/custom_data/"
       key: "env_path"
 ```
 
@@ -66,15 +60,15 @@ A suggested way to organize this is by creating the config file and launch file 
 
 ```xml
 <launch>
-  <node name="inorbit_republisher" pkg="inorbit_republisher" type="republisher.py">
-    <param name="config" textfile="$(find inorbit_republisher)/config/example.yaml" />
+  <node name="inorbit_republisher" pkg="inorbit_republisher" exec="republisher">
+    <param name="config" value="$(dirname)/config/example.yaml" />
   </node>
 </launch>
 ```
 
-## Mapping ROS topics
+## Mapping ROS2 topics
 
-The republisher can map the ROS values to single field (e.g. ``'fruit=apple'``) or to an array of fields (e.g. ``'fruits=[{fruit1: apple, fruit2: orange}, {fruit1: melon, fruit2: apple}]'``). The former is useful to capture simple fields and the latter to get data from an array of values.
+The republisher can map the ROS2 values to single field (e.g. ``'fruit=apple'``) or to an array of fields (e.g. ``'fruits=[{fruit1: apple, fruit2: orange}, {fruit1: melon, fruit2: apple}]'``). The former is useful to capture simple fields and the latter to get data from an array of values.
 
 ### Single field: mapping options
 
@@ -143,35 +137,23 @@ See the included example configuration in `config/example.yaml` for specific exa
 
 These values will be published as latched and delivered only once every time a subscriber connects to the republisher.
 
-## Publishing latched values
-
-Republishing latched topics requires a special treatment to make sure that all latched messages, from each mapping defined, get published when a new subscriber connects to the output topic (this case is prone to subscription issues depending on nodes startup timing). To achieve this, add a flag to the input topic config indicating that it is latched:
-
-```yaml
-republishers:
-  - topic: "/map_metadata"
-    latched: true
-```
-
 ## Building and running locally
 
-Find below instructions for building the package and running the node using the the code on the workspace (see also [catkin](https://catkin-tools.readthedocs.io/en/latest/verbs/catkin_build.html)).
+Find below instructions for building the package and running the node using the the code on the workspace (see also [colcon](https://colcon.readthedocs.io/en/released/reference/verb/build.html)).
 
 ### Build
 
 ```bash
-cd ~/catkin_ws
-rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=noetic
-catkin clean
-catkin build inorbit_republisher --verbose
+cd ~/ros2_ws
+colcon build --packages-select inorbit_republisher
 ```
 
 ### Run
 
 ```bash
-. ~/catkin_ws/install/setup.zsh
+source install/local_setup.bash
 # Using the launch file under the 'launch' directory
-roslaunch launch/example.launch
+ros2 launch inorbit_republisher example.launch.xml
 ```
 
 ## TODO
