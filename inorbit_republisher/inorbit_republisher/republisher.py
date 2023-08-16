@@ -204,7 +204,7 @@ def extract_value(msg, getter_fn):
 Extracts several values from a given nested msg field and returns a dictionary of
 <field, value> elements
 """
-# TODO(Elvio): after refactoring and using Node as classes
+# TODO(elvioaruta): after refactoring and using Node as classes
 # remove the node from this function and figure out a better way
 # to log warnings inside
 def extract_values_as_dict(msg, mapping, node):
