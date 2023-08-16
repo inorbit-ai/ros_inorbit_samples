@@ -88,6 +88,7 @@ def main(args = None):
     # Dictionary of subscriber instances by topic name
     subs = {}
 
+    # TODO(adamantivm) Port ability to publish package versions from ROS 1 Noetic to ROS 2 Foxy
     # # In case we want to query ROS package options
     # rospack = rospkg.RosPack()
 
