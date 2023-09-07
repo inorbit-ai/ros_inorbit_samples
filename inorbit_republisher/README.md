@@ -17,7 +17,7 @@ Create a YAML config file specifying the mappings you would like to use using th
     - field: "num_oranges"
       mapping_type: "single_field"
       out:
-        topic: "/inorbit/custom_data/"
+        topic: "/inorbit/custom_data"
         key: "oranges"
   - topic: "/hardware/status"
     msg_type: "hw_msgs/msg/HardwareStatus"
@@ -28,7 +28,7 @@ Create a YAML config file specifying the mappings you would like to use using th
         filter: 'lambda x: (x.status == 1)'
       mapping_type: "array_of_fields"
       out:
-        topic: "/inorbit/custom_data/"
+        topic: "/inorbit/custom_data"
         key: "hardware_error"
   - topic: "/cmd_vel"
     qos: 10
@@ -45,12 +45,12 @@ Create a YAML config file specifying the mappings you would like to use using th
   static_publishers:
   - value: "this is a fixed string"
     out:
-      topic: "/inorbit/custom_data/"
+      topic: "/inorbit/custom_data"
       key: "greeting"
   - value_from:
       environment_variable: "PATH"
     out:
-      topic: "/inorbit/custom_data/"
+      topic: "/inorbit/custom_data"
       key: "env_path"
 ```
 
@@ -118,7 +118,7 @@ The `mapping_options` for this type include:
 
   would output a JSON object with the fields as keys with their respective values for the message
 
-  ```
+  ```text
   data: "linear_vel={\"y\": 0.00013548378774430603, \"x\": 0.0732172280550003, \"z\": 0.0}"
   ```
 
@@ -141,11 +141,22 @@ These values will be published as latched and delivered only once every time a s
 
 Find below instructions for building the package and running the node using the the code on the workspace (see also [colcon](https://colcon.readthedocs.io/en/released/reference/verb/build.html)).
 
+### Start ROS2 docker container (optional)
+
+You can run the commands below for building and running the republisher inside a docker container.
+
+```bash
+docker run -ti --rm \
+  --workdir /root/ros2_ws/ \
+  -v .:/root/ros2_ws/src/inorbit_republisher \
+  osrf/ros:foxy-desktop
+```
+
 ### Build
 
 ```bash
 cd ~/ros2_ws
-colcon build --packages-select inorbit_republisher
+colcon build --packages-select inorbit_republisher --symlink-install
 ```
 
 ### Run
