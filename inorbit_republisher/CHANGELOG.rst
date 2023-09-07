@@ -2,8 +2,8 @@
 Changelog for package inorbit_republisher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2023-09-07)
+------------------
 * Fix variable shadowing on message `callback` method (`#21 <https://github.com/inorbit-ai/ros_inorbit_samples/issues/21>`_)
 * Contributors: Leandro
 

@@ -6,7 +6,7 @@ package_name = 'inorbit_republisher'
 
 setup(
     name=package_name,
-    version='0.4.0',
+    version='0.4.1',
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
