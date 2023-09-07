@@ -118,7 +118,7 @@ The `mapping_options` for this type include:
 
   would output a JSON object with the fields as keys with their respective values for the message
 
-  ```
+  ```text
   data: "linear_vel={\"y\": 0.00013548378774430603, \"x\": 0.0732172280550003, \"z\": 0.0}"
   ```
 
@@ -141,11 +141,22 @@ These values will be published as latched and delivered only once every time a s
 
 Find below instructions for building the package and running the node using the the code on the workspace (see also [colcon](https://colcon.readthedocs.io/en/released/reference/verb/build.html)).
 
+### Start ROS2 docker container (optional)
+
+You can run the commands below for building and running the republisher inside a docker container.
+
+```bash
+docker run -ti --rm \
+  --workdir /root/ros2_ws/ \
+  -v .:/root/ros2_ws/src/inorbit_republisher \
+  osrf/ros:foxy-desktop
+```
+
 ### Build
 
 ```bash
 cd ~/ros2_ws
-colcon build --packages-select inorbit_republisher
+colcon build --packages-select inorbit_republisher --symlink-install
 ```
 
 ### Run

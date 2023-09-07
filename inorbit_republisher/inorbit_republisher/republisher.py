@@ -142,9 +142,7 @@ def main(args = None):
                         node.get_logger().warning(f"Failed to serialize message: {e}")
 
                 if val is not None:
-                    msg = String()
-                    msg.data = f"{key}={val}"
-                    pubs[topic].publish(msg)
+                    pubs[topic].publish(String(data=f"{key}={val}"))
 
         in_topic = repub['topic']
         # Reads QoS from the topic settings
@@ -179,9 +177,7 @@ def main(args = None):
         # TODO(adamantivm) Make these values latched
         if val is not None:
             pub = node.create_publisher(String, topic, 10)
-            msg = String()
-            msg.data = f"{key}={val}"
-            pub.publish(msg)
+            pub.publish(String(data=f"{key}={val}"))
 
     node.get_logger().info("Republisher started")
     rclpy.spin(node)
