@@ -17,7 +17,7 @@ Create a YAML config file specifying the mappings you would like to use using th
     - field: "num_oranges"
       mapping_type: "single_field"
       out:
-        topic: "/inorbit/custom_data/"
+        topic: "/inorbit/custom_data"
         key: "oranges"
   - topic: "/hardware/status"
     msg_type: "hw_msgs/msg/HardwareStatus"
@@ -28,7 +28,7 @@ Create a YAML config file specifying the mappings you would like to use using th
         filter: 'lambda x: (x.status == 1)'
       mapping_type: "array_of_fields"
       out:
-        topic: "/inorbit/custom_data/"
+        topic: "/inorbit/custom_data"
         key: "hardware_error"
   - topic: "/cmd_vel"
     qos: 10
@@ -45,12 +45,12 @@ Create a YAML config file specifying the mappings you would like to use using th
   static_publishers:
   - value: "this is a fixed string"
     out:
-      topic: "/inorbit/custom_data/"
+      topic: "/inorbit/custom_data"
       key: "greeting"
   - value_from:
       environment_variable: "PATH"
     out:
-      topic: "/inorbit/custom_data/"
+      topic: "/inorbit/custom_data"
       key: "env_path"
 ```
 
