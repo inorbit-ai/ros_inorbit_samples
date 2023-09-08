@@ -49,7 +49,7 @@ Create a YAML config file specifying the mappings you would like to use using th
       mapping_options:
         fields: ["status", "latitude", "longitude", "position_covariance_type"]
       out:
-        topic: "/inorbit/custom_command"
+        topic: "/inorbit/custom_data"
         key: "navsat"
   static_publishers:
   - value: "this is a fixed string"

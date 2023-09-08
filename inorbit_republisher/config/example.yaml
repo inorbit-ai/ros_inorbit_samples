@@ -53,7 +53,7 @@ republishers:
     mapping_options:
       fields: ["status", "latitude", "longitude", "position_covariance_type"]
     out:
-      topic: "/inorbit/custom_command"
+      topic: "/inorbit/custom_data"
       key: "navsat"
 
 static_publishers:
