@@ -42,6 +42,15 @@ Create a YAML config file specifying the mappings you would like to use using th
       out:
         topic: "/inorbit/linear_vel_test"
         key: "linear_vel"
+  - topic: "/navsat"
+    msg_type: "sensor_msgs/NavSatFix"
+    mappings:
+    - mapping_type: "serialize"
+      mapping_options:
+        fields: ["status", "latitude", "longitude", "position_covariance_type"]
+      out:
+        topic: "/inorbit/custom_command"
+        key: "navsat"
   static_publishers:
   - value: "this is a fixed string"
     out:
@@ -74,6 +83,7 @@ The republisher can map the ROS2 values to single field (e.g. ``'fruit=apple'``)
 
 When republishing a single field, you can include a set of ``mapping_options`` for each ``mapping``. These include:
 
+* `mapping_type`: this mapping option should be set to `single_field`.
 * `filter`: a lambda expression that can be used to control whether or not the value is published based on a condition. For example, if you'd like to republish only String values that are different than ``SPAMMY STRING``, you can do it with:
 
   ```yaml
@@ -85,6 +95,7 @@ When republishing a single field, you can include a set of ``mapping_options`` f
 
 When republishing an array of fields, you can include a set of ``mapping_options`` for each ``mapping``. These include:
 
+* `mapping_type`: this mapping option should be set to `array_of_fields`.
 * `fields`: a set of fields that you'd like to capture from each array element. For example, if each array element contains the elements ``[a, c, d, e]`` and you'd like to get ``a`` and ``c`` only, you can specify it as:
 
   ```yaml
@@ -107,6 +118,7 @@ When republishing several fields of a nested structure, this mapping type allows
 
 The `mapping_options` for this type include:
 
+* `mapping_type`: this mapping option should be set to `json_of_fields`.
 * `fields`: a set of fields that you'd like to capture from the nested message. For example, if your message definition looks like [Twist](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html):
 
   setting
@@ -127,6 +139,26 @@ The `mapping_options` for this type include:
   ```yaml
   mapping_options:
     filter: 'lambda linear_vel: (linear_vel["z"] != 0)'
+  ```
+
+### Serialize: mapping options
+
+This mapping option transforms the entire ROS message to a JSON string.
+
+The `mapping_options` for this type include:
+
+* `mapping_type`: this mapping option should be set to `serialize`.
+* `fields`: (optional) a set of first level fields or keys to keep. If not provided, all fields are kept. For example, for serializing a [NavSatFix](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/NavSatFix.html) message while keeping 3 fields use:
+
+  ```yaml
+  mapping_options:
+    fields: ["status", "latitude", "longitude", "position_covariance_type"]
+  ```
+
+  would output a JSON object with the fields as keys with their respective values for the message
+
+  ```text
+  data: 'navsat={"status": {"status": 0, "service": 0}, "latitude": 0.0, "longitude": 0.0, "position_covariance_type": 0}'
   ```
 
 ## Publishing fixed values
@@ -156,6 +188,7 @@ docker run -ti --rm \
 
 ```bash
 cd ~/ros2_ws
+rosdep install --from-paths src -y --ignore-src
 colcon build --packages-select inorbit_republisher --symlink-install
 ```
 

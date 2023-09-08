@@ -30,6 +30,7 @@ import rclpy
 from rosidl_runtime_py.utilities import get_message
 import yaml
 import os
+from rosidl_runtime_py.convert import message_to_ordereddict
 from std_msgs.msg import String
 from builtin_interfaces.msg import Time
 from operator import attrgetter
@@ -38,6 +39,7 @@ from operator import attrgetter
 MAPPING_TYPE_SINGLE_FIELD = "single_field"
 MAPPING_TYPE_ARRAY_OF_FIELDS = "array_of_fields"
 MAPPING_TYPE_JSON_OF_FIELDS = "json_of_fields"
+MAPPING_TYPE_SERIALIZE = "serialize"
 
 # Supported static publisher value sources
 STATIC_VALUE_FROM_PACKAGE_VERSION = "package_version"
@@ -108,7 +110,9 @@ def main(args = None):
             if not out_topic in pubs:
                 # NOTE(adamantivm) Using QOS = 10 to match InOrbit Custom Data topic spec
                 pubs[out_topic] = node.create_publisher(String, out_topic, 10)
-            mapping['attrgetter'] = attrgetter(mapping['field'])
+            # 'field' mapping is not defined when serializing messages
+            if 'field' in mapping:
+                mapping['attrgetter'] = attrgetter(mapping['field'])
 
         # Prepare callback to relay messages through InOrbit custom data
         def callback(msg, repub=repub):
@@ -136,6 +140,13 @@ def main(args = None):
                         val = extract_values_as_dict(msg, mapping, node)
                         # extract_values_as_dict has the ability to filter messages and
                         # returns None when an element doesn't pass the filter
+                        if val:
+                          val = json.dumps(val, cls=ROS2JSONEncoder)
+                    except TypeError as e:
+                        node.get_logger().warning(f"Failed to serialize message: {e}")
+                elif mapping_type == MAPPING_TYPE_SERIALIZE:
+                    try:
+                        val = serialize(msg, mapping)
                         if val:
                           val = json.dumps(val, cls=ROS2JSONEncoder)
                     except TypeError as e:
@@ -266,6 +277,27 @@ def process_array(field, mapping):
     else:
         values['data'] = filtered_array
     return json.dumps(values, cls=ROS2JSONEncoder)
+
+"""
+Transforms the ROS message to json and:
+    - Filters out fields on the top level of the json only.
+"""
+def serialize(msg, mapping):
+    # TODO: design filtering support and implement it. It should be possible
+    # to leverage jq to do so. However, this would require adding a new rosdep
+    # rule for `pyjq`: https://pypi.org/project/pyjq/.
+    # filter = mapping.get('mapping_options', {}).get('filter')
+    
+    # Get fields configuration
+    fields = mapping.get('mapping_options', {}).get('fields')
+    # Transform ROS message to dict
+    msg_dict = message_to_ordereddict(msg)
+    
+    # Shrink output by keeping only selected fields or keys
+    if fields:
+        msg_dict = { k: v for k, v in msg_dict.items() if k in fields}
+
+    return msg_dict
 
 if __name__ == '__main__':
     main()

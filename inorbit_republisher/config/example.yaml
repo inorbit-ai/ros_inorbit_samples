@@ -35,6 +35,7 @@ republishers:
     out:
       topic: "/inorbit/linear_vel_test"
       key: "linear_vel"
+
 - topic: "/map_metadata"
   latched: true
   msg_type: "nav_msgs/msg/MapMetaData"
@@ -44,6 +45,16 @@ republishers:
     out:
       topic: "/inorbit/map_res_test"
       key: "map_resolution"
+
+- topic: "/navsat"
+  msg_type: "sensor_msgs/NavSatFix"
+  mappings:
+  - mapping_type: "serialize"
+    mapping_options:
+      fields: ["status", "latitude", "longitude", "position_covariance_type"]
+    out:
+      topic: "/inorbit/custom_command"
+      key: "navsat"
 
 static_publishers:
 # - value_from:
