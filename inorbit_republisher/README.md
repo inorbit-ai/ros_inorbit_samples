@@ -164,7 +164,7 @@ The `mapping_options` for this type include:
   would output a JSON object with the fields as keys with their respective values for the message
 
   ```text
-  data: 'navsat={"status": {"status": 0, "service": 0}, "latitude": 0.0, "longitude": 0.0, "position_covariance_type": 0}'
+  data: "navsat={\"status\": {\"status\": 0, \"service\": 0}, \"latitude\": 0.0, \"longitude\" : 0.0, \"position_covariance_type\": 0}"
   ```
 
 ## Publishing fixed values
