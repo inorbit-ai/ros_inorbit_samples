@@ -44,6 +44,16 @@ republishers:
       topic: "/inorbit/map_res_test"
       key: "map_resolution"
 
+- topic: "/navsat"
+  msg_type: "sensor_msgs/NavSatFix"
+  mappings:
+  - mapping_type: "serialize"
+    mapping_options:
+      fields: ["status", "latitude", "longitude", "position_covariance_type"]
+    out:
+      topic: "/inorbit/custom_data/0"
+      key: "navsat"
+
 static_publishers:
 - value_from:
     package_version: "rospy"

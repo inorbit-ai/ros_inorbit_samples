@@ -34,11 +34,13 @@ import os
 from std_msgs.msg import String
 from roslib.message import get_message_class
 from operator import attrgetter
+from rospy_message_converter import message_converter
 
 # Types of mappings allowed
 MAPPING_TYPE_SINGLE_FIELD = "single_field"
 MAPPING_TYPE_ARRAY_OF_FIELDS = "array_of_fields"
 MAPPING_TYPE_JSON_OF_FIELDS = "json_of_fields"
+MAPPING_TYPE_SERIALIZE = "serialize"
 
 # Supported static publisher value sources
 STATIC_VALUE_FROM_PACKAGE_VERSION = "package_version"
@@ -105,7 +107,9 @@ def main():
             pub_key = "{}+{}".format(out_topic, in_topic) if latched else out_topic
             if not pub_key in pubs:
                 pubs[pub_key] = publisher_class(out_topic, String, queue_size=100)
-            mapping['attrgetter'] = attrgetter(mapping['field'])
+            # 'field' mapping is not defined when serializing messages
+            if 'field' in mapping:
+                mapping['attrgetter'] = attrgetter(mapping['field'])
 
         # Prepare callback to relay messages through InOrbit custom data
         def callback(msg, repub=repub, in_topic=in_topic, latched=latched):
@@ -134,6 +138,14 @@ def main():
                           val = json.dumps(val)
                     except TypeError as e:
                         rospy.logwarn("Failed to serialize message: %s", e)
+                
+                elif mapping_type == MAPPING_TYPE_SERIALIZE:
+                    try:
+                        val = serialize(msg, mapping)
+                        if val:
+                          val = json.dumps(val)
+                    except TypeError as e:
+                        rospy.logwarn(f"Failed to serialize message: {e}")
 
                 if val is not None:
                     pub_key = "{}+{}".format(topic, in_topic) if latched else topic
@@ -257,6 +269,26 @@ def process_array(field, mapping):
 
     return json.dumps(values)
 
+"""
+Transforms the ROS message to json and:
+    - Filters out fields on the top level of the json only.
+"""
+def serialize(msg, mapping):
+    # TODO: design filtering support and implement it. It should be possible
+    # to leverage jq to do so. However, this would require adding a new rosdep
+    # rule for `pyjq`: https://pypi.org/project/pyjq/.
+    # filter = mapping.get('mapping_options', {}).get('filter')
+
+    # Get fields configuration
+    fields = mapping.get('mapping_options', {}).get('fields')
+    # Transform ROS message to dict
+    msg_dict = message_converter.convert_ros_message_to_dictionary(msg)
+
+    # Shrink output by keeping only selected fields or keys
+    if fields:
+        msg_dict = { k: v for k, v in msg_dict.items() if k in fields}
+
+    return msg_dict
 
 """
 Wrapper class to allow publishing more than one latched message over the same topic, working
