@@ -148,7 +148,7 @@ This mapping option transforms the entire ROS message to a JSON string.
 The `mapping_options` for this type include:
 
 * `mapping_type`: this mapping option should be set to `serialize`.
-* `fields`: (optional) a set of first level fields or keys to keep. If not provided, all fields are kept. For example, using the following mapping option for serializing 4 [NavSatFix](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/NavSatFix.html) fields:
+* `fields`: (optional) a set of first level fields or keys to keep. If not provided, all fields are kept. For example, using the following mapping option for serializing 4 [NavSatFix](https://docs.ros2.org/latest/api/sensor_msgs/msg/NavSatFix.html) fields:
 
   ```yaml
   mapping_options:
