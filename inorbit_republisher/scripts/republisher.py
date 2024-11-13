@@ -55,7 +55,7 @@ as complexity increases.
 """
 def main():
     # Start the ROS node
-    rospy.init_node('inorbit_republisher', anonymous=True)
+    rospy.init_node('inorbit_republisher', anonymous=True, log_level=rospy.INFO)
 
     # Read republisher configuration from the 'config_file' or 'config' parameter
     # TODO(adamantivm) Error handling and schema checking
@@ -113,7 +113,6 @@ def main():
 
         # Prepare callback to relay messages through InOrbit custom data
         def callback(msg, repub=repub, in_topic=in_topic, latched=latched):
-
             for mapping in repub['mappings']:
                 key = mapping['out']['key']
                 val = None
@@ -298,15 +297,19 @@ For more details see: https://github.com/ros/ros_comm/issues/146#issuecomment-30
 class LatchPublisher(rospy.Publisher, rospy.SubscribeListener):
     def __init__(self, name, data_class, tcp_nodelay=False, headers=None, queue_size=None):
         super(LatchPublisher, self).__init__(name, data_class=data_class, tcp_nodelay=tcp_nodelay, headers=headers, queue_size=queue_size, subscriber_listener=self, latch=False)
-        self.message = None
+        self.latch_publisher = super(LatchPublisher, self)
+        # Store all kv messages when publising.
+        self.message = dict()
 
     def publish(self, msg):
-        self.message = msg
-        super(LatchPublisher, self).publish(msg)
+        # Map key to message so they can be all published when a peer subscribes.
+        self.message[msg.split('=')[0]] = msg
+        self.latch_publisher.publish(msg)
 
     def peer_subscribe(self, resolved_name, publish, publish_single):
-        if self.message is not None:
-            super(LatchPublisher, self).publish(self.message)
+        # Publish all key-values when a peer subscribes.
+        for v in self.message.values():
+            self.latch_publisher.publish(v)
 
 if __name__ == '__main__':
     try:

@@ -1,5 +1,5 @@
 <launch>
-  <node name="inorbit_republisher" pkg="inorbit_republisher" type="republisher.py">
+  <node name="inorbit_republisher" pkg="inorbit_republisher" type="republisher.py" output="screen">
     <param name="config" textfile="$(find inorbit_republisher)/config/example.yaml" />
   </node>
 </launch>
