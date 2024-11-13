@@ -298,7 +298,7 @@ class LatchPublisher(rospy.Publisher, rospy.SubscribeListener):
     def __init__(self, name, data_class, tcp_nodelay=False, headers=None, queue_size=None):
         super(LatchPublisher, self).__init__(name, data_class=data_class, tcp_nodelay=tcp_nodelay, headers=headers, queue_size=queue_size, subscriber_listener=self, latch=False)
         self.latch_publisher = super(LatchPublisher, self)
-        # Store all kv messages when publising.
+        # Store all kv messages when publishing.
         self.message = dict()
 
     def publish(self, msg):
