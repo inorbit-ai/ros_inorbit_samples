@@ -56,6 +56,36 @@ class ROS2JSONEncoder(json.JSONEncoder):
         if isinstance(obj, bytes):
             return obj.decode()
         return json.JSONEncoder.default(self, obj)
+class Republisher:
+    def __init__(self):
+        self.node = rclpy.create_node('republisher')  # Crea un nodo
+        self.publisher = self.node.create_publisher(String, 'republished_topic', 10)  # Crea un publicador
+        self.subscription = self.node.create_subscription(String, 'input_topic', self.listener_callback, 10)  # Se suscribe al topic
+        self.timer = self.node.create_timer(1.0, self.timer_callback)  # Crea un temporizador
+#To test listener abilities
+    def listener_callback(self, msg):
+        # Función llamada cada vez que se recibe un mensaje en 'input_topic'
+        print(f"Received message: {msg.data}")
+        # Publicar el mismo mensaje en 'republished_topic'
+        msgError = String()
+        msgError.data = "HARDCODED BUG"
+        self.publisher.publish(msgError)
+        print(f"Republished message: {msgError.data}")
+#To test publisher abilities
+    def timer_callback(self):
+        # Esta función se llama cada 1 segundo (si configuramos el temporizador a 1.0)
+        # Publicar un mensaje cada vez que el temporizador se activa
+        msg = String()
+        msg.data = "Work all night on a drink of rum"
+        self.publisher.publish(msg)
+        print(f"Published timer message: {msg.data}")
+    def spin(self):
+        # Hacer que el nodo escuche y procese mensajes indefinidamente
+        rclpy.spin(self.node)
+    def shutdown(self):
+        # Cerrar el nodo al final
+        self.node.destroy_node()
+        rclpy.shutdown()
 """
 Main node entry point.
 
@@ -186,43 +216,21 @@ def main(args = None):
         if val is not None:
             pub = node.create_publisher(String, topic, 10)
             pub.publish(String(data=f"{key}={val}"))
-    publisher = node.create_publisher(String, 'republished_topic', 10)
+
     node.get_logger().info("Republisher started")
-# Función de callback para la suscripción
-    def listener_callback(msg):
-        # Esta función se llama cada vez que se recibe un mensaje en 'input_topic'
-        print(f"Received message: {msg.data}")
-        
-        # Publicar un mensaje modificado (en este caso, un mensaje de error)
-        msgError = String()
-        msgError.data = "HARDCODED BUG"
-        publisher.publish(msgError)
-        print(f"Republished message: {msgError.data}")
-
-    # Crear una suscripción para 'input_topic'
-    subscription = node.create_subscription(
-        String,  # Tipo de mensaje
-        'input_topic',  # Tópico al que se suscribe
-        listener_callback,  # Función callback que maneja los mensajes recibidos
-        10  # Tamaño de la cola de suscripción
-    )
-
-# Función de callback para el temporizador
-    def timer_callback():
-        # Esta función se llama cada 1 segundo
-        # Publicar un mensaje cada vez que el temporizador se activa
-        msg = String()
-        msg.data = "Work all night on a drink of rum"
-        publisher.publish(msg)
-        print(f"Published timer message: {msg.data}")
-
-    # Crear un temporizador que se llama cada 1 segundo
-    timer = node.create_timer(1.0, timer_callback)
+    republisher = Republisher()
+    try:
+        republisher.spin()  # Ejecutar el nodo
+    except KeyboardInterrupt:
+        pass
+    finally:
+        republisher.shutdown()  # Limpiar al terminar
     rclpy.spin(node)
+    node.get_logger().info("Republisher shutting down")
 
-    # Al final, apagar el nodo
     node.destroy_node()
     rclpy.shutdown()
+    node.get_logger().info("Shutdown complete")
 
 """
 Extracts a value from the given message using the provided getter function
