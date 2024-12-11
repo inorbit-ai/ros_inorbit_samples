@@ -1,0 +1,63 @@
+[0.000000] (-) TimerEvent: {}
+[0.000978] (inorbit_republisher) JobQueued: {'identifier': 'inorbit_republisher', 'dependencies': OrderedDict()}
+[0.001042] (inorbit_republisher) JobStarted: {'identifier': 'inorbit_republisher'}
+[0.099762] (-) TimerEvent: {}
+[0.200047] (-) TimerEvent: {}
+[0.300339] (-) TimerEvent: {}
+[0.400636] (-) TimerEvent: {}
+[0.500934] (-) TimerEvent: {}
+[0.601262] (-) TimerEvent: {}
+[0.701506] (-) TimerEvent: {}
+[0.801774] (-) TimerEvent: {}
+[0.902048] (-) TimerEvent: {}
+[0.961538] (inorbit_republisher) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'egg_info', '--egg-base', 'build/inorbit_republisher', 'build', '--build-base', '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build', 'install', '--record', '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/install.log', '--install-scripts', '$base/lib/inorbit_republisher', '--single-version-externally-managed', 'install_data'], 'cwd': '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher', 'env': {'HOSTNAME': 'f13a413805f8', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/root/ros2_ws/install/yasmin_demos/lib:/root/ros2_ws/install/yasmin_viewer/lib:/root/ros2_ws/install/yasmin_ros/lib:/root/ros2_ws/install/yasmin_msgs/lib:/root/ros2_ws/install/yasmin/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/lib', 'HOME': '/root', 'OLDPWD': '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/inorbit_republisher', 'ROS_PYTHON_VERSION': '3', 'COLCON_PREFIX_PATH': '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install:/root/ros2_ws/install', 'ROS_DISTRO': 'jazzy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'PATH': '/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'AMENT_PREFIX_PATH': '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher:/root/ros2_ws/install/yasmin_demos:/root/ros2_ws/install/yasmin_viewer:/root/ros2_ws/install/yasmin_ros:/root/ros2_ws/install/yasmin_msgs:/root/ros2_ws/install/yasmin:/opt/ros/jazzy', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'PWD': '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages:/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages:/root/ros2_ws/install/yasmin_demos/lib/python3.12/site-packages:/root/ros2_ws/install/yasmin_viewer/lib/python3.12/site-packages:/root/ros2_ws/install/yasmin_ros/lib/python3.12/site-packages:/root/ros2_ws/install/yasmin_msgs/lib/python3.12/site-packages:/root/ros2_ws/install/yasmin/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/root/ros2_ws/install/yasmin_demos:/root/ros2_ws/install/yasmin_viewer:/root/ros2_ws/install/yasmin_ros:/root/ros2_ws/install/yasmin_msgs:/root/ros2_ws/install/yasmin'}, 'shell': False}
+[1.002178] (-) TimerEvent: {}
+[1.102438] (-) TimerEvent: {}
+[1.124984] (inorbit_republisher) StderrLine: {'line': b'/usr/lib/python3/dist-packages/setuptools/dist.py:744: SetuptoolsDeprecationWarning: Invalid dash-separated options\n'}
+[1.125193] (inorbit_republisher) StderrLine: {'line': b'!!\n'}
+[1.125303] (inorbit_republisher) StderrLine: {'line': b'\n'}
+[1.125407] (inorbit_republisher) StderrLine: {'line': b'        ********************************************************************************\n'}
+[1.125509] (inorbit_republisher) StderrLine: {'line': b"        Usage of dash-separated 'script-dir' will not be supported in future\n"}
+[1.125611] (inorbit_republisher) StderrLine: {'line': b"        versions. Please use the underscore name 'script_dir' instead.\n"}
+[1.125712] (inorbit_republisher) StderrLine: {'line': b'\n'}
+[1.125858] (inorbit_republisher) StderrLine: {'line': b'        This deprecation is overdue, please update your project and remove deprecated\n'}
+[1.125961] (inorbit_republisher) StderrLine: {'line': b'        calls to avoid build errors in the future.\n'}
+[1.126061] (inorbit_republisher) StderrLine: {'line': b'\n'}
+[1.126162] (inorbit_republisher) StderrLine: {'line': b'        See https://setuptools.pypa.io/en/latest/userguide/declarative_config.html for details.\n'}
+[1.126263] (inorbit_republisher) StderrLine: {'line': b'        ********************************************************************************\n'}
+[1.126364] (inorbit_republisher) StderrLine: {'line': b'\n'}
+[1.126464] (inorbit_republisher) StderrLine: {'line': b'!!\n'}
+[1.126564] (inorbit_republisher) StderrLine: {'line': b'  opt = self.warn_dash_deprecation(opt, section)\n'}
+[1.202557] (-) TimerEvent: {}
+[1.287297] (inorbit_republisher) StdoutLine: {'line': b'running egg_info\n'}
+[1.302672] (-) TimerEvent: {}
+[1.306423] (inorbit_republisher) StdoutLine: {'line': b'writing build/inorbit_republisher/inorbit_republisher.egg-info/PKG-INFO\n'}
+[1.306748] (inorbit_republisher) StdoutLine: {'line': b'writing dependency_links to build/inorbit_republisher/inorbit_republisher.egg-info/dependency_links.txt\n'}
+[1.306997] (inorbit_republisher) StdoutLine: {'line': b'writing entry points to build/inorbit_republisher/inorbit_republisher.egg-info/entry_points.txt\n'}
+[1.307185] (inorbit_republisher) StdoutLine: {'line': b'writing requirements to build/inorbit_republisher/inorbit_republisher.egg-info/requires.txt\n'}
+[1.307388] (inorbit_republisher) StdoutLine: {'line': b'writing top-level names to build/inorbit_republisher/inorbit_republisher.egg-info/top_level.txt\n'}
+[1.349158] (inorbit_republisher) StdoutLine: {'line': b"reading manifest file 'build/inorbit_republisher/inorbit_republisher.egg-info/SOURCES.txt'\n"}
+[1.350873] (inorbit_republisher) StdoutLine: {'line': b"writing manifest file 'build/inorbit_republisher/inorbit_republisher.egg-info/SOURCES.txt'\n"}
+[1.351127] (inorbit_republisher) StdoutLine: {'line': b'running build\n'}
+[1.351328] (inorbit_republisher) StdoutLine: {'line': b'running build_py\n'}
+[1.351514] (inorbit_republisher) StdoutLine: {'line': b'copying inorbit_republisher/republisher.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher\n'}
+[1.351795] (inorbit_republisher) StdoutLine: {'line': b'copying inorbit_republisher/subscriber_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher\n'}
+[1.352173] (inorbit_republisher) StdoutLine: {'line': b'running install\n'}
+[1.362261] (inorbit_republisher) StdoutLine: {'line': b'running install_lib\n'}
+[1.381524] (inorbit_republisher) StdoutLine: {'line': b'copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/republisher.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher\n'}
+[1.381944] (inorbit_republisher) StdoutLine: {'line': b'copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/subscriber_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher\n'}
+[1.383106] (inorbit_republisher) StdoutLine: {'line': b'byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/republisher.py to republisher.cpython-312.pyc\n'}
+[1.387298] (inorbit_republisher) StdoutLine: {'line': b'byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/subscriber_test.py to subscriber_test.cpython-312.pyc\n'}
+[1.388309] (inorbit_republisher) StdoutLine: {'line': b'running install_data\n'}
+[1.388732] (inorbit_republisher) StdoutLine: {'line': b'running install_egg_info\n'}
+[1.402796] (-) TimerEvent: {}
+[1.413057] (inorbit_republisher) StdoutLine: {'line': b"removing '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher-0.4.1-py3.12.egg-info' (and everything under it)\n"}
+[1.413484] (inorbit_republisher) StdoutLine: {'line': b'Copying build/inorbit_republisher/inorbit_republisher.egg-info to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher-0.4.1-py3.12.egg-info\n'}
+[1.414950] (inorbit_republisher) StdoutLine: {'line': b'running install_scripts\n'}
+[1.502918] (-) TimerEvent: {}
+[1.554092] (inorbit_republisher) StdoutLine: {'line': b'Installing republisher script to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/inorbit_republisher\n'}
+[1.554677] (inorbit_republisher) StdoutLine: {'line': b"writing list of installed files to '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/install.log'\n"}
+[1.595982] (inorbit_republisher) CommandEnded: {'returncode': 0}
+[1.603006] (-) TimerEvent: {}
+[1.610078] (inorbit_republisher) JobEnded: {'identifier': 'inorbit_republisher', 'rc': 0}
+[1.611181] (-) EventReactorShutdown: {}

@@ -1,0 +1,32 @@
+[0.941s] Invoking command in '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher': PYTHONPATH=/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build --no-deps symlink_data
+[1.098s] /usr/lib/python3/dist-packages/setuptools/dist.py:744: SetuptoolsDeprecationWarning: Invalid dash-separated options
+[1.098s] !!
+[1.098s] 
+[1.098s]         ********************************************************************************
+[1.099s]         Usage of dash-separated 'script-dir' will not be supported in future
+[1.099s]         versions. Please use the underscore name 'script_dir' instead.
+[1.099s] 
+[1.099s]         This deprecation is overdue, please update your project and remove deprecated
+[1.099s]         calls to avoid build errors in the future.
+[1.099s] 
+[1.099s]         See https://setuptools.pypa.io/en/latest/userguide/declarative_config.html for details.
+[1.100s]         ********************************************************************************
+[1.100s] 
+[1.100s] !!
+[1.100s]   opt = self.warn_dash_deprecation(opt, section)
+[1.303s] running develop
+[1.498s] running egg_info
+[1.517s] writing inorbit_republisher.egg-info/PKG-INFO
+[1.517s] writing dependency_links to inorbit_republisher.egg-info/dependency_links.txt
+[1.518s] writing entry points to inorbit_republisher.egg-info/entry_points.txt
+[1.518s] writing requirements to inorbit_republisher.egg-info/requires.txt
+[1.518s] writing top-level names to inorbit_republisher.egg-info/top_level.txt
+[1.560s] reading manifest file 'inorbit_republisher.egg-info/SOURCES.txt'
+[1.561s] writing manifest file 'inorbit_republisher.egg-info/SOURCES.txt'
+[1.583s] running build_ext
+[1.583s] Creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit-republisher.egg-link (link to .)
+[1.584s] Installing republisher script to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/inorbit_republisher
+[1.584s] 
+[1.585s] Installed /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher
+[1.585s] running symlink_data
+[1.625s] Invoked command in '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher' returned '0': PYTHONPATH=/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build --no-deps symlink_data

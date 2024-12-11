@@ -1,0 +1,71 @@
+/usr/lib/python3/dist-packages/setuptools/dist.py:744: SetuptoolsDeprecationWarning: Invalid dash-separated options
+!!
+
+        ********************************************************************************
+        Usage of dash-separated 'script-dir' will not be supported in future
+        versions. Please use the underscore name 'script_dir' instead.
+
+        This deprecation is overdue, please update your project and remove deprecated
+        calls to avoid build errors in the future.
+
+        See https://setuptools.pypa.io/en/latest/userguide/declarative_config.html for details.
+        ********************************************************************************
+
+!!
+  opt = self.warn_dash_deprecation(opt, section)
+running develop
+Removing /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit-republisher.egg-link (link to .)
+/usr/lib/python3/dist-packages/setuptools/dist.py:744: SetuptoolsDeprecationWarning: Invalid dash-separated options
+!!
+
+        ********************************************************************************
+        Usage of dash-separated 'script-dir' will not be supported in future
+        versions. Please use the underscore name 'script_dir' instead.
+
+        This deprecation is overdue, please update your project and remove deprecated
+        calls to avoid build errors in the future.
+
+        See https://setuptools.pypa.io/en/latest/userguide/declarative_config.html for details.
+        ********************************************************************************
+
+!!
+  opt = self.warn_dash_deprecation(opt, section)
+running egg_info
+writing build/inorbit_republisher/inorbit_republisher.egg-info/PKG-INFO
+writing dependency_links to build/inorbit_republisher/inorbit_republisher.egg-info/dependency_links.txt
+writing entry points to build/inorbit_republisher/inorbit_republisher.egg-info/entry_points.txt
+writing requirements to build/inorbit_republisher/inorbit_republisher.egg-info/requires.txt
+writing top-level names to build/inorbit_republisher/inorbit_republisher.egg-info/top_level.txt
+reading manifest file 'build/inorbit_republisher/inorbit_republisher.egg-info/SOURCES.txt'
+writing manifest file 'build/inorbit_republisher/inorbit_republisher.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build
+creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib
+creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+copying inorbit_republisher/__init__.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+copying inorbit_republisher/republisher.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+copying inorbit_republisher/publisher_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+copying inorbit_republisher/subscriber_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+running install
+running install_lib
+creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/__init__.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/republisher.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/publisher_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/subscriber_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/__init__.py to __init__.cpython-312.pyc
+byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/republisher.py to republisher.cpython-312.pyc
+byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/publisher_test.py to publisher_test.cpython-312.pyc
+byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/subscriber_test.py to subscriber_test.cpython-312.pyc
+running install_data
+copying resource/inorbit_republisher -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/ament_index/resource_index/packages
+copying package.xml -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/inorbit_republisher
+copying launch/example.launch.xml -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/inorbit_republisher
+copying launch/republisher_launch.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/inorbit_republisher
+copying config/example.yaml -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/inorbit_republisher/config
+running install_egg_info
+Copying build/inorbit_republisher/inorbit_republisher.egg-info to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher-0.4.1-py3.12.egg-info
+running install_scripts
+Installing republisher script to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/inorbit_republisher
+writing list of installed files to '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/install.log'

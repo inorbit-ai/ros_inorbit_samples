@@ -1,0 +1,25 @@
+running egg_info
+writing build/inorbit_republisher/inorbit_republisher.egg-info/PKG-INFO
+writing dependency_links to build/inorbit_republisher/inorbit_republisher.egg-info/dependency_links.txt
+writing entry points to build/inorbit_republisher/inorbit_republisher.egg-info/entry_points.txt
+writing requirements to build/inorbit_republisher/inorbit_republisher.egg-info/requires.txt
+writing top-level names to build/inorbit_republisher/inorbit_republisher.egg-info/top_level.txt
+reading manifest file 'build/inorbit_republisher/inorbit_republisher.egg-info/SOURCES.txt'
+writing manifest file 'build/inorbit_republisher/inorbit_republisher.egg-info/SOURCES.txt'
+running build
+running build_py
+copying inorbit_republisher/republisher.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+copying inorbit_republisher/subscriber_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+running install
+running install_lib
+copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/republisher.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/subscriber_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/republisher.py to republisher.cpython-312.pyc
+byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/subscriber_test.py to subscriber_test.cpython-312.pyc
+running install_data
+running install_egg_info
+removing '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher-0.4.1-py3.12.egg-info' (and everything under it)
+Copying build/inorbit_republisher/inorbit_republisher.egg-info to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher-0.4.1-py3.12.egg-info
+running install_scripts
+Installing republisher script to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/inorbit_republisher
+writing list of installed files to '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/install.log'

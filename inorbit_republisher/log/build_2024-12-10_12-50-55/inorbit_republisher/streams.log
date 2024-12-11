@@ -1,0 +1,75 @@
+[0.910s] Invoking command in '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher': PYTHONPATH=/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --uninstall --editable --build-directory /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build
+[1.071s] /usr/lib/python3/dist-packages/setuptools/dist.py:744: SetuptoolsDeprecationWarning: Invalid dash-separated options
+[1.072s] !!
+[1.072s] 
+[1.072s]         ********************************************************************************
+[1.072s]         Usage of dash-separated 'script-dir' will not be supported in future
+[1.072s]         versions. Please use the underscore name 'script_dir' instead.
+[1.072s] 
+[1.072s]         This deprecation is overdue, please update your project and remove deprecated
+[1.072s]         calls to avoid build errors in the future.
+[1.072s] 
+[1.073s]         See https://setuptools.pypa.io/en/latest/userguide/declarative_config.html for details.
+[1.073s]         ********************************************************************************
+[1.073s] 
+[1.073s] !!
+[1.073s]   opt = self.warn_dash_deprecation(opt, section)
+[1.254s] running develop
+[1.451s] Removing /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit-republisher.egg-link (link to .)
+[1.489s] Invoked command in '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher' returned '0': PYTHONPATH=/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --uninstall --editable --build-directory /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build
+[1.491s] Invoking command in '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher': PYTHONPATH=/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/inorbit_republisher build --build-base /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build install --record /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/install.log --install-scripts $base/lib/inorbit_republisher --single-version-externally-managed install_data --force
+[1.664s] /usr/lib/python3/dist-packages/setuptools/dist.py:744: SetuptoolsDeprecationWarning: Invalid dash-separated options
+[1.664s] !!
+[1.664s] 
+[1.664s]         ********************************************************************************
+[1.664s]         Usage of dash-separated 'script-dir' will not be supported in future
+[1.664s]         versions. Please use the underscore name 'script_dir' instead.
+[1.665s] 
+[1.665s]         This deprecation is overdue, please update your project and remove deprecated
+[1.665s]         calls to avoid build errors in the future.
+[1.665s] 
+[1.665s]         See https://setuptools.pypa.io/en/latest/userguide/declarative_config.html for details.
+[1.665s]         ********************************************************************************
+[1.665s] 
+[1.666s] !!
+[1.666s]   opt = self.warn_dash_deprecation(opt, section)
+[1.804s] running egg_info
+[1.824s] writing build/inorbit_republisher/inorbit_republisher.egg-info/PKG-INFO
+[1.824s] writing dependency_links to build/inorbit_republisher/inorbit_republisher.egg-info/dependency_links.txt
+[1.824s] writing entry points to build/inorbit_republisher/inorbit_republisher.egg-info/entry_points.txt
+[1.824s] writing requirements to build/inorbit_republisher/inorbit_republisher.egg-info/requires.txt
+[1.824s] writing top-level names to build/inorbit_republisher/inorbit_republisher.egg-info/top_level.txt
+[1.865s] reading manifest file 'build/inorbit_republisher/inorbit_republisher.egg-info/SOURCES.txt'
+[1.866s] writing manifest file 'build/inorbit_republisher/inorbit_republisher.egg-info/SOURCES.txt'
+[1.866s] running build
+[1.866s] running build_py
+[1.866s] creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build
+[1.867s] creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib
+[1.867s] creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+[1.867s] copying inorbit_republisher/__init__.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+[1.867s] copying inorbit_republisher/republisher.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+[1.867s] copying inorbit_republisher/publisher_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+[1.867s] copying inorbit_republisher/subscriber_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher
+[1.868s] running install
+[1.882s] running install_lib
+[1.902s] creating /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+[1.902s] copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/__init__.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+[1.902s] copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/republisher.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+[1.902s] copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/publisher_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+[1.903s] copying /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build/lib/inorbit_republisher/subscriber_test.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher
+[1.903s] byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/__init__.py to __init__.cpython-312.pyc
+[1.904s] byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/republisher.py to republisher.cpython-312.pyc
+[1.908s] byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/publisher_test.py to publisher_test.cpython-312.pyc
+[1.908s] byte-compiling /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher/subscriber_test.py to subscriber_test.cpython-312.pyc
+[1.909s] running install_data
+[1.909s] copying resource/inorbit_republisher -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/ament_index/resource_index/packages
+[1.910s] copying package.xml -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/inorbit_republisher
+[1.910s] copying launch/example.launch.xml -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/inorbit_republisher
+[1.910s] copying launch/republisher_launch.py -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/inorbit_republisher
+[1.910s] copying config/example.yaml -> /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/share/inorbit_republisher/config
+[1.911s] running install_egg_info
+[1.939s] Copying build/inorbit_republisher/inorbit_republisher.egg-info to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages/inorbit_republisher-0.4.1-py3.12.egg-info
+[1.940s] running install_scripts
+[2.080s] Installing republisher script to /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/inorbit_republisher
+[2.081s] writing list of installed files to '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/install.log'
+[2.117s] Invoked command in '/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher' returned '0': PYTHONPATH=/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/install/inorbit_republisher/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/inorbit_republisher build --build-base /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/build install --record /workspace/ros_inorbit_samples.code-workspace/inorbit_republisher/build/inorbit_republisher/install.log --install-scripts $base/lib/inorbit_republisher --single-version-externally-managed install_data --force

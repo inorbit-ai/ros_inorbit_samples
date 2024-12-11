@@ -56,40 +56,19 @@ class ROS2JSONEncoder(json.JSONEncoder):
         if isinstance(obj, bytes):
             return obj.decode()
         return json.JSONEncoder.default(self, obj)
-class Republisher:
-    def __init__(self):
-        self.node = rclpy.create_node('republisher')  # Crea un nodo
-        self.publisher = self.node.create_publisher(String, 'republished_topic', 10)  # Crea un publicador
-        self.subscription = self.node.create_subscription(String, 'input_topic', self.listener_callback, 10)  # Se suscribe al topic
-        self.timer = self.node.create_timer(1.0, self.timer_callback)  # Crea un temporizador
-#To test listener abilities
-    def listener_callback(self, msg):
-        # Función llamada cada vez que se recibe un mensaje en 'input_topic'
-        print(f"Received message: {msg.data}")
-        # Publicar el mismo mensaje en 'republished_topic'
-        msgError = String()
-        msgError.data = "HARDCODED BUG"
-        self.publisher.publish(msgError)
-        print(f"Republished message: {msgError.data}")
-#To test publisher abilities
-    def timer_callback(self):
-        # Esta función se llama cada 1 segundo (si configuramos el temporizador a 1.0)
-        # Publicar un mensaje cada vez que el temporizador se activa
-        msg = String()
-        msg.data = "Work all night on a drink of rum"
-        self.publisher.publish(msg)
-        print(f"Published timer message: {msg.data}")
-
-    def spin(self):
-        # Hacer que el nodo escuche y procese mensajes indefinidamente
-        rclpy.spin(self.node)
-
-    def shutdown(self):
-        # Cerrar el nodo al final
-        self.node.destroy_node()
-        rclpy.shutdown()
-
+#TEST REPUBLISHER`s PUBLISH ABILITIES
 """
+def timer_callback(node, publisher):
+    # Create a new message of type String
+    msg = String()
+    msg.data = "Work all night on a drink of rum"
+    
+    # Log the message being published
+    node.get_logger().info(f'Publishing: {msg.data}')
+    
+    # Publish the message
+    publisher.publish(msg)
+   """ 
 #TEST REPUBLISHER'S SUBSCRIPTION ABILITIES
 def listener_callback(self, msg:String):
         # Este callback se ejecuta cada vez que recibamos un mensaje de input_topic
@@ -97,7 +76,6 @@ def listener_callback(self, msg:String):
     # Publicamos el mensaje en 'republished_topic'
     publisher.publish(msg)
     print(f"Republished message: {msg.data}")
-"""
 """
 Main node entry point.
 
@@ -119,9 +97,14 @@ def main(args = None):
         node.get_logger().info("Using config from config file: {}".format(config_file))
         config_yaml = open(config_file, "r")
     config = yaml.safe_load(config_yaml)
-
-
-    """Testing subscriber
+#######Irina's wreck it part: testing everything i can
+    """Testing publisher"""
+  #  publisher = node.create_publisher(String, 'republished_topic', 10)
+            # Create a timer that calls the timer_callback every second (1.0 seconds)
+   # timer_period = 1.0  # seconds
+  #  node.create_timer(timer_period, lambda: timer_callback(node, publisher))
+             # Spin the node so that it starts looping
+    """Testing subscriber"""
     global publisher
     publisher = node.create_publisher(String, 'republished_topic', 10)
 
@@ -131,7 +114,8 @@ def main(args = None):
         'input_topic',  # El topic donde escuchamos los mensajes
         listener_callback,  # El callback que procesará el mensaje
         10  # Tamaño de la cola
-    )    """
+    )    
+    rclpy.spin(node)
 
     # Go through republisher configurations
     # For each of them: create a publisher if necessary - only one per InOrbit
@@ -245,13 +229,6 @@ def main(args = None):
             pub.publish(String(data=f"{key}={val}"))
 
     node.get_logger().info("Republisher started")
-    republisher = Republisher()
-    try:
-        republisher.spin()  # Ejecutar el nodo
-    except KeyboardInterrupt:
-        pass
-    finally:
-        republisher.shutdown()  # Limpiar al terminar
     rclpy.spin(node)
     node.get_logger().info("Republisher shutting down")
 
@@ -362,4 +339,3 @@ def serialize(msg, mapping):
 
 if __name__ == '__main__':
     main()
-    
