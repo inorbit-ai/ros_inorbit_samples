@@ -1,0 +1,41 @@
+/usr/lib/python3/dist-packages/setuptools/dist.py:744: SetuptoolsDeprecationWarning: Invalid dash-separated options
+!!
+
+        ********************************************************************************
+        Usage of dash-separated 'script-dir' will not be supported in future
+        versions. Please use the underscore name 'script_dir' instead.
+
+        This deprecation is overdue, please update your project and remove deprecated
+        calls to avoid build errors in the future.
+
+        See https://setuptools.pypa.io/en/latest/userguide/declarative_config.html for details.
+        ********************************************************************************
+
+!!
+  opt = self.warn_dash_deprecation(opt, section)
+running develop
+running egg_info
+creating inorbit_republisher.egg-info
+writing inorbit_republisher.egg-info/PKG-INFO
+writing dependency_links to inorbit_republisher.egg-info/dependency_links.txt
+writing entry points to inorbit_republisher.egg-info/entry_points.txt
+writing requirements to inorbit_republisher.egg-info/requires.txt
+writing top-level names to inorbit_republisher.egg-info/top_level.txt
+writing manifest file 'inorbit_republisher.egg-info/SOURCES.txt'
+reading manifest file 'inorbit_republisher.egg-info/SOURCES.txt'
+writing manifest file 'inorbit_republisher.egg-info/SOURCES.txt'
+running build_ext
+Creating /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/lib/python3.12/site-packages/inorbit-republisher.egg-link (link to .)
+Installing republisher script to /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/lib/inorbit_republisher
+
+Installed /workspace/ros_inorbit_samples.code-workspace/build/inorbit_republisher
+running symlink_data
+creating /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/ament_index
+creating /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/ament_index/resource_index
+creating /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/ament_index/resource_index/packages
+symbolically linking /workspace/ros_inorbit_samples.code-workspace/build/inorbit_republisher/resource/inorbit_republisher -> /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/ament_index/resource_index/packages
+symbolically linking /workspace/ros_inorbit_samples.code-workspace/build/inorbit_republisher/package.xml -> /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/inorbit_republisher
+symbolically linking /workspace/ros_inorbit_samples.code-workspace/build/inorbit_republisher/launch/example.launch.xml -> /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/inorbit_republisher
+symbolically linking /workspace/ros_inorbit_samples.code-workspace/build/inorbit_republisher/launch/republisher_launch.py -> /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/inorbit_republisher
+creating /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/inorbit_republisher/config
+symbolically linking /workspace/ros_inorbit_samples.code-workspace/build/inorbit_republisher/config/example.yaml -> /workspace/ros_inorbit_samples.code-workspace/install/inorbit_republisher/share/inorbit_republisher/config
