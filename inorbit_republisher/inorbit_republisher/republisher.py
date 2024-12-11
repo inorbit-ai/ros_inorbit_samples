@@ -56,7 +56,6 @@ class ROS2JSONEncoder(json.JSONEncoder):
         if isinstance(obj, bytes):
             return obj.decode()
         return json.JSONEncoder.default(self, obj)
-
 """
 Main node entry point.
 
@@ -70,7 +69,7 @@ def main(args = None):
     node = rclpy.create_node('inorbit_republisher')
     # Declares the "config" parameter, it contains the path of the config file
     node.declare_parameter('config')
-    # Read republisher configuration from the 'config_file' or 'config' parameter
+# Read republisher configuration from the 'config_file' or 'config' parameter
     # TODO(adamantivm) Error handling and schema checking
     if node.has_parameter('config'):
         config_file = node.get_parameter(
@@ -78,7 +77,6 @@ def main(args = None):
         node.get_logger().info("Using config from config file: {}".format(config_file))
         config_yaml = open(config_file, "r")
     config = yaml.safe_load(config_yaml)
-
     # Go through republisher configurations
     # For each of them: create a publisher if necessary - only one per InOrbit
     # custom data field - and a matching subscriber to receive and republish
@@ -93,8 +91,7 @@ def main(args = None):
     # TODO(adamantivm) Port ability to publish package versions from ROS 1 Noetic to ROS 2 Foxy
     # # In case we want to query ROS package options
     # rospack = rospkg.RosPack()
-
-    # Set-up ROS topic republishers
+# Set-up ROS topic republishers
     republishers = config.get('republishers', ())
     for repub in republishers:
 
@@ -189,14 +186,43 @@ def main(args = None):
         if val is not None:
             pub = node.create_publisher(String, topic, 10)
             pub.publish(String(data=f"{key}={val}"))
-
+    publisher = node.create_publisher(String, 'republished_topic', 10)
     node.get_logger().info("Republisher started")
-    rclpy.spin(node)
-    node.get_logger().info("Republisher shutting down")
+# Función de callback para la suscripción
+    def listener_callback(msg):
+        # Esta función se llama cada vez que se recibe un mensaje en 'input_topic'
+        print(f"Received message: {msg.data}")
+        
+        # Publicar un mensaje modificado (en este caso, un mensaje de error)
+        msgError = String()
+        msgError.data = "EOOOO"
+        publisher.publish(msgError)
+        print(f"Republished message: {msgError.data}")
 
+    # Crear una suscripción para 'input_topic'
+    subscription = node.create_subscription(
+        String,  # Tipo de mensaje
+        'input_topic',  # Tópico al que se suscribe
+        listener_callback,  # Función callback que maneja los mensajes recibidos
+        10  # Tamaño de la cola de suscripción
+    )
+
+# Función de callback para el temporizador
+    def timer_callback():
+        # Esta función se llama cada 1 segundo
+        # Publicar un mensaje cada vez que el temporizador se activa
+        msg = String()
+        msg.data = "Work all night on a drink of rum"
+        publisher.publish(msg)
+        print(f"Published timer message: {msg.data}")
+
+    # Crear un temporizador que se llama cada 1 segundo
+    timer = node.create_timer(1.0, timer_callback)
+    rclpy.spin(node)
+
+    # Al final, apagar el nodo
     node.destroy_node()
     rclpy.shutdown()
-    node.get_logger().info("Shutdown complete")
 
 """
 Extracts a value from the given message using the provided getter function
@@ -301,3 +327,4 @@ def serialize(msg, mapping):
 
 if __name__ == '__main__':
     main()
+    
