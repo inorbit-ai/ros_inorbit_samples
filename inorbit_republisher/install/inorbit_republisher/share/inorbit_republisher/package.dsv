@@ -1,9 +1,0 @@
-source;share/inorbit_republisher/hook/pythonpath.ps1
-source;share/inorbit_republisher/hook/pythonpath.dsv
-source;share/inorbit_republisher/hook/pythonpath.sh
-source;share/inorbit_republisher/hook/ament_prefix_path.ps1
-source;share/inorbit_republisher/hook/ament_prefix_path.dsv
-source;share/inorbit_republisher/hook/ament_prefix_path.sh
-source;../../build/inorbit_republisher/share/inorbit_republisher/hook/pythonpath_develop.ps1
-source;../../build/inorbit_republisher/share/inorbit_republisher/hook/pythonpath_develop.dsv
-source;../../build/inorbit_republisher/share/inorbit_republisher/hook/pythonpath_develop.sh
