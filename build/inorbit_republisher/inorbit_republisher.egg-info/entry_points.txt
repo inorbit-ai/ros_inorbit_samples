@@ -1,2 +1,0 @@
-[console_scripts]
-republisher = inorbit_republisher.republisher:main

@@ -1,7 +1,0 @@
-Metadata-Version: 2.1
-Name: inorbit-republisher
-Version: 0.4.1
-Summary: ROS2 to InOrbit topic republisher
-Maintainer: InOrbit
-Maintainer-email: support@inorbit.ai
-License: MIT
