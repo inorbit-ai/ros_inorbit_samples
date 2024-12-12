@@ -1,8 +1,8 @@
 # InOrbit republisher for ROS 2
 
-This directory includes a republisher that allows mapping from arbitrary ROS2 values to ``InOrbit`` [custom data](https://www.inorbit.ai/faq#publish-custom-data) key/value pairs for application-specific observability.
+This directory includes a republisher that allows mapping from arbitrary ROS 2 values to ``InOrbit`` [custom data](https://www.inorbit.ai/faq#publish-custom-data) key/value pairs for application-specific observability.
 
-Currently only mapping from ROS2 topics is supported. The republisher could be extended to map actions, services and parameters.
+Currently only mapping from ROS 2 topics is supported. The republisher could be extended to map actions, services and parameters.
 
 ## Usage
 
@@ -75,9 +75,9 @@ A suggested way to organize this is by creating the config file and launch file 
 </launch>
 ```
 
-## Mapping ROS2 topics
+## Mapping ROS 2 topics
 
-The republisher can map the ROS2 values to single field (e.g. ``'fruit=apple'``) or to an array of fields (e.g. ``'fruits=[{fruit1: apple, fruit2: orange}, {fruit1: melon, fruit2: apple}]'``). The former is useful to capture simple fields and the latter to get data from an array of values.
+The republisher can map the ROS 2 values to single field (e.g. ``'fruit=apple'``) or to an array of fields (e.g. ``'fruits=[{fruit1: apple, fruit2: orange}, {fruit1: melon, fruit2: apple}]'``). The former is useful to capture simple fields and the latter to get data from an array of values.
 
 ### Single field: mapping options
 
@@ -148,7 +148,7 @@ This mapping option transforms the entire ROS message to a JSON string.
 The `mapping_options` for this type include:
 
 * `mapping_type`: this mapping option should be set to `serialize`.
-* `fields`: (optional) a set of first level fields or keys to keep. If not provided, all fields are kept. For example, using the following mapping option for serializing 4 [NavSatFix](https://docs.ros2.org/latest/api/sensor_msgs/msg/NavSatFix.html) fields:
+* `fields`: (optional) a set of first level fields or keys to keep. If not provided, all fields are kept. For example, using the following mapping option for serializing 4 [NavSatFix](https://docs.ROS 2.org/latest/api/sensor_msgs/msg/NavSatFix.html) fields:
 
   ```yaml
   mapping_options:
@@ -173,21 +173,21 @@ These values will be published as latched and delivered only once every time a s
 
 Find below instructions for building the package and running the node using the the code on the workspace (see also [colcon](https://colcon.readthedocs.io/en/released/reference/verb/build.html)).
 
-### Start ROS2 docker container (optional)
+### Start ROS 2 docker container (optional)
 
 You can run the commands below for building and running the republisher inside a docker container.
 
 ```bash
 docker run -ti --rm \
-  --workdir /root/ros2_ws/ \
-  -v .:/root/ros2_ws/src/inorbit_republisher \
+  --workdir /root/ROS 2_ws/ \
+  -v .:/root/ROS 2_ws/src/inorbit_republisher \
   osrf/ros:foxy-desktop
 ```
 
 ### Build
 
 ```bash
-cd ~/ros2_ws
+cd ~/ROS 2_ws
 rosdep install --from-paths src -y --ignore-src
 colcon build --packages-select inorbit_republisher --symlink-install
 ```
@@ -197,7 +197,7 @@ colcon build --packages-select inorbit_republisher --symlink-install
 ```bash
 source install/local_setup.bash
 # Using the launch file under the 'launch' directory
-ros2 launch inorbit_republisher example.launch.xml
+ROS 2 launch inorbit_republisher example.launch.xml
 ```
 
 ## TODO
