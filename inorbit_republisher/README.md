@@ -148,7 +148,7 @@ This mapping option transforms the entire ROS message to a JSON string.
 The `mapping_options` for this type include:
 
 * `mapping_type`: this mapping option should be set to `serialize`.
-* `fields`: (optional) a set of first level fields or keys to keep. If not provided, all fields are kept. For example, using the following mapping option for serializing 4 [NavSatFix](https://docs.ROS 2.org/latest/api/sensor_msgs/msg/NavSatFix.html) fields:
+* `fields`: (optional) a set of first level fields or keys to keep. If not provided, all fields are kept. For example, using the following mapping option for serializing 4 [NavSatFix](https://docs.ros2.org/latest/api/sensor_msgs/msg/NavSatFix.html) fields:
 
   ```yaml
   mapping_options:
@@ -179,15 +179,15 @@ You can run the commands below for building and running the republisher inside a
 
 ```bash
 docker run -ti --rm \
-  --workdir /root/ROS 2_ws/ \
-  -v .:/root/ROS 2_ws/src/inorbit_republisher \
+  --workdir /root/ros2_ws/ \
+  -v .:/root/ros2_ws/src/inorbit_republisher \
   osrf/ros:foxy-desktop
 ```
 
 ### Build
 
 ```bash
-cd ~/ROS 2_ws
+cd ~/ros2_ws
 rosdep install --from-paths src -y --ignore-src
 colcon build --packages-select inorbit_republisher --symlink-install
 ```
@@ -197,7 +197,7 @@ colcon build --packages-select inorbit_republisher --symlink-install
 ```bash
 source install/local_setup.bash
 # Using the launch file under the 'launch' directory
-ROS 2 launch inorbit_republisher example.launch.xml
+ros2 launch inorbit_republisher example.launch.xml
 ```
 
 ## TODO
