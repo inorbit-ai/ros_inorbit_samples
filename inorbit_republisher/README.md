@@ -181,7 +181,7 @@ You can run the commands below for building and running the republisher inside a
 docker run -ti --rm \
   --workdir /root/ros2_ws/ \
   -v .:/root/ros2_ws/src/inorbit_republisher \
-  osrf/ros:foxy-desktop
+  osrf/ros:humble-desktop
 ```
 
 ### Build
