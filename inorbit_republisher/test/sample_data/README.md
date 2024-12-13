@@ -22,8 +22,11 @@ To validate the node works launch the sample by using the ``sample_data.launch``
 
 ```bash
 . ~/catkin_ws/devel/setup.zsh
+cd catkin_ws/src/inorbit_republisher/test/sample_data
 roslaunch sample_data.launch
 # On a different terminal windows
+cd catkin_ws/src/inorbit_republisher/test/sample_data
+source /opt/ros/noetic/setup.bash
 $ rostopic echo my_temperature
 data: "my_temperature=41.0"
 ---
