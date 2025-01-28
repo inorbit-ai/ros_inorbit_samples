@@ -1,0 +1,6 @@
+  <launch>
+    <node name="inorbit_republisher" pkg="inorbit_republisher" exec="republisher">
+      <param name="config" value="/root/ros2_ws/src/inorbit_republisher/test/sample_data/config.yaml" />
+    </node>
+    <executable cmd="ros2 bag play ros2_ws/src/inorbit_republisher/test/sample_data/hardcodedRosbag/rosbag2_2024_12_13-19_33_34_0.db3 -l" output="screen" />
+</launch>

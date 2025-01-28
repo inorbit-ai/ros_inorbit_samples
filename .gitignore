@@ -1,1 +1,25 @@
+# Launch files
+*build/
+*devel/
+*install/
+*log/
+
+# Python files 
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Git history
+*.history/
+
+# VS files
+.vscode/
+.idea/
+*.swp
+
+# Dependencies 
+venv/
+*.egg-info/
+*.eggs/
+pip-log.txt
