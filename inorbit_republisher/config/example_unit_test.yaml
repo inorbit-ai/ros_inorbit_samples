@@ -1,0 +1,29 @@
+republishers:
+- topic: "/input_topic"
+  msg_type: "std_msgs/String"
+  mappings:
+  - field: "data"
+    mapping_type: "single_field"
+    out:
+      topic: "/output_topic"
+      key: "input_to_output"
+static_publishers:
+- value_from:
+    package_version: "rospy"
+  out:
+    topic: "/inorbit/custom_data/0"
+    key: "rospy_version"
+- value_from:
+    package_version: "inorbit_republisher"
+  out:
+    topic: "/inorbit/custom_data/0"
+    key: "inorbit_republisher_version"
+- value_from:
+    environment_variable: "PYTHONPATH"
+  out:
+    topic: "/inorbit/custom_data/0"
+    key: "python_path"
+- value: "let's republish in orbit"
+  out:
+    topic: "/inorbit/custom_data/0"
+    key: "greeting"

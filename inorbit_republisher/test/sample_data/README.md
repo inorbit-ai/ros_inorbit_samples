@@ -19,14 +19,30 @@ topics:      /my_magnetic_field   10 msgs    : sensor_msgs/MagneticField
 ```
 
 To validate the node works launch the sample by using the ``sample_data.launch`` launch file and look at ``out`` topic: ``rostopic echo /inorbit/custom_data/0``.
-
-```bash
-. ~/catkin_ws/devel/setup.zsh
-cd ~/catkin_ws/src/inorbit_republisher/test/sample_data
-roslaunch sample_data.launch
+1. **Start ROS2 docker container (optional)**:
+You can run the commands below for building and running the republisher inside a docker container.
+  ```bash
+  docker run -ti --rm \
+    --workdir /root/catkin_ws/ \
+    -v .:/root/catkin_ws/src/inorbit_republisher \
+    osrf/ros:noetic-desktop
+  # Install catkin
+  apt update && apt install python3-catkin-tools python3-osrf-pycommon -y
+  ```
+2. **Build the Workspace**:
+  Ensure the workspace is built and the environment is sourced:
+  ```bash
+  cd ~/catkin_ws
+  rosdep install --from-paths ~/catkin_ws/src --ignore-src --rosdistro=noetic
+  catkin clean 
+  catkin build inorbit_republisher --verbose
+  ```
+3. **Source and Run the Workspace**:
+  ```bash
+  . ~/catkin_ws/install/setup.zsh
+  roslaunch sample_data.launch
 # On a different terminal windows
-source /opt/ros/noetic/setup.bash
-$ rostopic echo my_temperature
+$ rostopic echo /inorbit/custom_data/0
 data: "my_temperature=41.0"
 ---
 data: "my_magnetic_field_x=1.4"
