@@ -20,3 +20,4 @@ venv/
 *.egg-info/
 *.eggs/
 pip-log.txt
+sync_branches.sh
