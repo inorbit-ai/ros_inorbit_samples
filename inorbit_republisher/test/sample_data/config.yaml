@@ -1,0 +1,23 @@
+republishers:
+  - topic: "/my_magnetic_field"
+    msg_type: "sensor_msgs/MagneticField"
+    mappings:
+    - field: "magnetic_field.x"
+      out:
+        topic: "/inorbit/custom_data"
+        key: "my_magnetic_field_x"
+    - field: "magnetic_field.y"
+      out:
+        topic: "/inorbit/custom_data"
+        key: "my_magnetic_field_y"
+    - field: "magnetic_field.z"
+      out:
+        topic: "/inorbit/custom_data"
+        key: "my_magnetic_field_z"
+  - topic: "/my_temperature"
+    msg_type: "sensor_msgs/Temperature"
+    mappings:
+    - field: "temperature"
+      out:
+        topic: "/inorbit/custom_data"
+        key: "my_temperature"
