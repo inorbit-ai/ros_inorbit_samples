@@ -1,8 +1,8 @@
 # InOrbit republisher for ROS 2
 
-This directory includes a republisher that allows mapping from arbitrary ROS2 values to ``InOrbit`` [custom data](https://www.inorbit.ai/faq#publish-custom-data) key/value pairs for application-specific observability.
+This directory includes a republisher that allows mapping from arbitrary ROS 2 values to ``InOrbit`` [custom data](https://www.inorbit.ai/faq#publish-custom-data) key/value pairs for application-specific observability.
 
-Currently only mapping from ROS2 topics is supported. The republisher could be extended to map actions, services and parameters.
+Currently only mapping from ROS 2 topics is supported. The republisher could be extended to map actions, services and parameters.
 
 ## Usage
 
@@ -75,9 +75,9 @@ A suggested way to organize this is by creating the config file and launch file 
 </launch>
 ```
 
-## Mapping ROS2 topics
+## Mapping ROS 2 topics
 
-The republisher can map the ROS2 values to single field (e.g. ``'fruit=apple'``) or to an array of fields (e.g. ``'fruits=[{fruit1: apple, fruit2: orange}, {fruit1: melon, fruit2: apple}]'``). The former is useful to capture simple fields and the latter to get data from an array of values.
+The republisher can map the ROS 2 values to single field (e.g. ``'fruit=apple'``) or to an array of fields (e.g. ``'fruits=[{fruit1: apple, fruit2: orange}, {fruit1: melon, fruit2: apple}]'``). The former is useful to capture simple fields and the latter to get data from an array of values.
 
 ### Single field: mapping options
 
@@ -173,7 +173,7 @@ These values will be published as latched and delivered only once every time a s
 
 Find below instructions for building the package and running the node using the the code on the workspace (see also [colcon](https://colcon.readthedocs.io/en/released/reference/verb/build.html)).
 
-### Start ROS2 docker container (optional)
+### Start ROS 2 docker container (optional)
 
 You can run the commands below for building and running the republisher inside a docker container.
 
@@ -181,7 +181,7 @@ You can run the commands below for building and running the republisher inside a
 docker run -ti --rm \
   --workdir /root/ros2_ws/ \
   -v .:/root/ros2_ws/src/inorbit_republisher \
-  osrf/ros:foxy-desktop
+  osrf/ros:jazzy-desktop
 ```
 
 ### Build
