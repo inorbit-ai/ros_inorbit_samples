@@ -90,6 +90,7 @@ def main(args = None):
     # Dictionary of subscriber instances by topic name
     subs = {}
 
+    last_data = {}
     # TODO(adamantivm) Port ability to publish package versions from ROS 1 Noetic to ROS 2 Foxy
     # # In case we want to query ROS package options
     # rospack = rospkg.RosPack()
@@ -153,6 +154,11 @@ def main(args = None):
                         node.get_logger().warning(f"Failed to serialize message: {e}")
 
                 if val is not None:
+                    if repub.get("on_change"):
+                        uniq_key = f"{topic}:{key}"
+                        if last_data.get(uniq_key) == str(val):
+                            return
+                        last_data[uniq_key] = str(val)
                     pubs[topic].publish(String(data=f"{key}={val}"))
 
         in_topic = repub['topic']
