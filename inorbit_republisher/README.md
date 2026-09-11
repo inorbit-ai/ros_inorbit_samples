@@ -91,6 +91,19 @@ When republishing a single field, you can include a set of ``mapping_options`` f
     filter: 'lambda x: (x != "SPAMMY STRING")'
   ```
 
+* `scale`: a number the value is multiplied by before publishing. Useful when the ROS units differ from the ones InOrbit expects. For example, [`sensor_msgs/BatteryState.percentage`](https://docs.ros2.org/latest/api/sensor_msgs/msg/BatteryState.html) is specified as a `0..1` fraction, while a battery charge is usually displayed as a percentage:
+
+  ```yaml
+  mapping_options:
+    scale: 100
+  ```
+
+  so `0.898` is published as `89.8`.
+
+  `scale` applies only to numeric values. Strings and booleans are rejected and nothing is published for that mapping, because Python would otherwise turn `'ab'` into `'ababab'` and `True` into `100` instead of failing.
+
+  When combined with `filter`, the filter runs **first and sees the raw value**, so adding a `scale` never changes which values an existing filter lets through.
+
 ### Array of fields: mapping options
 
 When republishing an array of fields, you can include a set of ``mapping_options`` for each ``mapping``. These include:

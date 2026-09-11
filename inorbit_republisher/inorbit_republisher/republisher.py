@@ -127,7 +127,7 @@ def main(args = None):
                 if mapping_type == MAPPING_TYPE_SINGLE_FIELD:
                     # TODO(adamantivm) Exception handling
                     field = extract_value(msg, attrgetter(mapping['field']))
-                    val = process_single_field(field, mapping)
+                    val = process_single_field(field, mapping, node)
                     # Time values can't be cleanly serialized into JSON. convert them to milliseconds
                     if isinstance(val, Time):
                         val = rclpy.time.Time.from_msg(val).nanoseconds / 1000000
@@ -246,10 +246,33 @@ Processes a scalar value before publishing according to mapping options
  - If a 'filter' function is provided, it returns the value only if the
    result of passing the field value through the filter function is True,
    otherwise it returns None
+ - If a 'scale' factor is provided, the value is multiplied by it. Useful for
+   fields whose ROS units differ from the ones InOrbit expects, e.g.
+   sensor_msgs/BatteryState.percentage is spec'd 0..1 but is shown as a
+   percentage, so it needs 'scale: 100'.
+   The filter runs first and sees the raw value, so adding a scale never
+   changes what an existing filter does.
 """
-def process_single_field(field_value, mapping):
+def process_single_field(field_value, mapping, node=None):
     filter_fn = mapping.get('mapping_options', {}).get('filter')
-    return field_value if not filter_fn or eval(filter_fn)(field_value) else None
+    if filter_fn and not eval(filter_fn)(field_value):
+        return None
+
+    scale = mapping.get('mapping_options', {}).get('scale')
+    if scale is None:
+        return field_value
+
+    # Neither of these would raise: bool is an int subclass, and 'str' * int
+    # silently repeats the string. Both would publish nonsense, so refuse to
+    # publish at all rather than emit a plausible-looking wrong value.
+    if isinstance(field_value, bool) or not isinstance(field_value, (int, float)):
+        if node:
+            node.get_logger().warning(
+                f"Ignoring mapping with 'scale': expected a number, "
+                f"got {type(field_value).__name__}")
+        return None
+
+    return field_value * scale
 
 """
 Processes a given array field from the ROS message and:
