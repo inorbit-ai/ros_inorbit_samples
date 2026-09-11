@@ -12,6 +12,17 @@ ARG ROS_DISTRO=humble
 FROM ros:${ROS_DISTRO}-ros-base
 ARG ROS_DISTRO
 
+# ros-base ships only the default RMW (fastrtps), so this image crash-loops on
+# a fleet running any other transport -- the node dies on a missing
+# librmw_*.so. Carrying all three keeps it transport-agnostic:
+# RMW_IMPLEMENTATION picks one at runtime and the default is unchanged.
+# No ldconfig needed -- the entrypoint sources setup.bash, which already puts
+# zenoh_cpp_vendor/lib on LD_LIBRARY_PATH.
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
+      ros-${ROS_DISTRO}-rmw-zenoh-cpp \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY inorbit_republisher /ws/src/inorbit_republisher
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh \
     && cd /ws && colcon build --packages-select inorbit_republisher

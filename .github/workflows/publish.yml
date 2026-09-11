@@ -46,6 +46,18 @@ jobs:
             && colcon test --packages-select inorbit_republisher --event-handlers console_direct+ \
             && colcon test-result --verbose'
 
+      # The consuming fleet picks the transport, so every RMW the image claims to
+      # support has to actually load. Nothing else here catches this: the suite
+      # and the smoke check both run under the default RMW, so a missing
+      # librmw_*.so stays invisible until a fleet crash-loops on it.
+      - name: RMW check
+        run: |
+          for rmw in rmw_fastrtps_cpp rmw_cyclonedds_cpp rmw_zenoh_cpp; do
+            docker run --rm -e RMW_IMPLEMENTATION=$rmw $IMAGE:$ROS_DISTRO python3 -c \
+              'import rclpy; rclpy.init(); rclpy.create_node("rmw_check"); print("ok")' 2>&1 \
+              | grep -qx ok || { echo "::error::$rmw failed to load"; exit 1; }
+          done
+
       # The suite exercises the node, not the packaging: this checks the entry
       # point is on the path once the image entrypoint has sourced the overlay.
       - name: Smoke test
