@@ -1,0 +1,64 @@
+name: publish
+
+on:
+  push:
+    branches: [jazzy-devel, humble-devel]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+# :<distro> is a moving tag, so the newest commit has to be the one that lands
+# last. Two pushes in quick succession would otherwise race, and a slower
+# earlier run could overwrite the tag with the older image. Grouped by ref so
+# the distro branches never cancel each other.
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Branches are per-distro, so the branch name picks both the base image
+      # and the published tag. That keeps this file identical on every ROS 2
+      # *-devel branch. On a PR, GITHUB_REF_NAME is the merge ref, so fall back
+      # to the target branch.
+      - name: Resolve ROS distro
+        run: |
+          BRANCH="${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}"
+          echo "ROS_DISTRO=${BRANCH%-devel}" >> $GITHUB_ENV
+          echo "IMAGE=ghcr.io/${{ github.repository_owner }}/inorbit_republisher" >> $GITHUB_ENV
+
+      - name: Build
+        run: docker build --build-arg ROS_DISTRO=$ROS_DISTRO -t $IMAGE:$ROS_DISTRO .
+
+      # The launch_testing suite, run against the exact image that gets pushed.
+      # `colcon test` exits 0 even when tests fail, so `colcon test-result` is
+      # the actual gate.
+      - name: Test
+        run: |
+          docker run --rm $IMAGE:$ROS_DISTRO bash -c 'cd /ws \
+            && colcon test --packages-select inorbit_republisher --event-handlers console_direct+ \
+            && colcon test-result --verbose'
+
+      # The suite exercises the node, not the packaging: this checks the entry
+      # point is on the path once the image entrypoint has sourced the overlay.
+      - name: Smoke test
+        run: |
+          docker run --rm $IMAGE:$ROS_DISTRO ros2 pkg executables inorbit_republisher \
+            | grep -qx 'inorbit_republisher republisher'
+
+      # Publish so the image is usable without cloning. Branch pushes only,
+      # never PRs, and only once the tests passed.
+      - name: Push
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker push $IMAGE:$ROS_DISTRO
+          docker tag $IMAGE:$ROS_DISTRO $IMAGE:$ROS_DISTRO-${GITHUB_SHA::8}
+          docker push $IMAGE:$ROS_DISTRO-${GITHUB_SHA::8}
